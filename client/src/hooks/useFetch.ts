@@ -1,13 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import axios, { isAxiosError, type AxiosRequestConfig } from "axios";
 
-export function useFetch<T>(key: string, url: string, options?: AxiosRequestConfig) {
+export function useFetch<T>(key: string[], url: string, axiousConfig?: AxiosRequestConfig, queryOptions?: Omit<UseQueryOptions<T, Error>, "queryKey" | "queryFn">): ReturnType<typeof useQuery<T, Error>> {
 
    async function queryFn() {
       console.log(`Fetching data from ${url} (key: ${key})`)
 
       try {
-         const response = await axios.get<T>(url, options);
+         const response = await axios.get<T>(url, axiousConfig);
          
          console.log(response.data)
 
@@ -25,12 +25,11 @@ export function useFetch<T>(key: string, url: string, options?: AxiosRequestConf
    }
 
    return useQuery<T, Error>({
-      queryKey: [key],
+      queryKey: key,
       queryFn,
+      enabled: key.every(Boolean),
       staleTime: 5 * 60 * 1000,
-      refetchOnWindowFocus: true,
-      refetchOnReconnect: true,
-      refetchOnMount: true,
       retry: false,
+      ...queryOptions,
    });
 }

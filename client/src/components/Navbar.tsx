@@ -4,10 +4,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router';
+import useUser from '../hooks/useUser';
 
 export default function Navbar() {
 
    const nav = useNavigate();
+
+   const { data: user } = useUser();
 
    return (
       <Box sx={{ flexGrow: 1 }}>
@@ -31,12 +34,30 @@ export default function Navbar() {
                >
                   Forum123
                </Typography>
-               <Button 
-                  color="inherit"
-                  onClick={() => nav('/auth')}
-               >
-                  Login
-               </Button>
+               {user ? (
+                  <>
+                     <Typography 
+                        variant="body1" 
+                        component="div" 
+                        sx={{ marginRight: 2 }}
+                     >
+                        Welcome, {user.username}
+                     </Typography>
+                     <Button 
+                        color="inherit"
+                        onClick={() => nav('/logout')}
+                     >
+                        Logout
+                     </Button>
+                  </>
+               ) : (
+                  <Button 
+                     color="inherit"
+                     onClick={() => nav('/auth')}
+                  >
+                     Login
+                  </Button>
+               )}
             </Toolbar>
          </AppBar>
       </Box>
