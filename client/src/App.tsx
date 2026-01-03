@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 
 import GenericLoading from "./components/GenericLoading";
 import AuthRoutesWrapper from "./components/auth/AuthWrapper";
+import Navbar from "./components/Navbar";
 
 const NotFound = lazy(() => import("./components/NotFound"));
 const ErrorPage = lazy(() => import("./components/ErrorPage"));
@@ -22,6 +23,7 @@ export default function App() {
          <BrowserRouter>
             <Toaster/>
             <ErrorBoundary fallback={<ErrorPage />}>
+               <Navbar/>
                <Suspense fallback={<GenericLoading/>}>
                   <Routes>
 
