@@ -21,7 +21,8 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	Token string `json:"token"`
+	Username string `json:"username"`
+	ID int `json:"id"`
 }
 
 type JWTClaims struct {
@@ -64,6 +65,7 @@ func Login(pool *pgxpool.Pool) gin.HandlerFunc {
 		})
 
 		tokenString, err := token.SignedString(jwtSecret)
+
 		if err != nil {
 			fmt.Println("Error generating token:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
@@ -72,9 +74,20 @@ func Login(pool *pgxpool.Pool) gin.HandlerFunc {
 		}
 
 		fmt.Println("User logged in:", user.Username)
+
+		c.SetCookie(
+			"forum_token",          		// cookie name
+			tokenString,             		// value
+			86400,                   		// max age (seconds)
+			"/",                     		// path
+			"",                      		// domain (empty = current)
+			gin.Mode() == gin.ReleaseMode,// secure (true in production HTTPS)
+			true,                    		// httpOnly
+		)
 		
 		c.JSON(http.StatusOK, LoginResponse{
-			Token: tokenString,
+			Username: user.Username,
+			ID: user.ID,
 		})
 	}
 }

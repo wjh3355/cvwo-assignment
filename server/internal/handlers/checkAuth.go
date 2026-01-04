@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -11,19 +10,10 @@ import (
 
 func CheckAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenStr := ""
 
-		authHeader := c.GetHeader("Authorization")
+		tokenStr, err := c.Cookie("forum_token")
 
-		if strings.HasPrefix(authHeader, "Bearer ") {
-			tokenStr = strings.TrimPrefix(authHeader, "Bearer ")
-		} else {
-			if cookie, err := c.Cookie("token"); err == nil {
-				tokenStr = cookie
-			}
-		}
-
-		if tokenStr == "" {
+		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token not provided"})
 			c.Abort()
 			return
