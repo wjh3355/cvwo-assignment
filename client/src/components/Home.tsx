@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router"
-import { TOPICS } from "../consts";
+import { TOPICS } from "../config";
 import { capitalise } from "../utils";
 import Button from "@mui/material/Button"
 
@@ -13,7 +13,7 @@ export default function Home() {
          <ul>
             {TOPICS.map(topic => (
                <li key={topic}>
-                  <Button 
+                  <Button
                      onClick={() => nav(`/${topic}`)}
                      variant="contained"
                   >

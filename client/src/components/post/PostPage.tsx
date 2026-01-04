@@ -15,8 +15,7 @@ export default function PostPage() {
       isError: postsError,
    } = useFetch<Post[]>(
       ['posts', topic!],
-      `/api/topics/${topic}`,
-      {},
+      `/topics/${topic}`,
       { enabled: validTopic }
    );
 
@@ -26,8 +25,7 @@ export default function PostPage() {
       isError: commentsError,
    } = useFetch<Comment[]>(
       ['comments', postId!],
-      `/api/comments/${postId}`,
-      {}, 
+      `/comments/${postId}`,
       { enabled: validTopic && !!postId }
    );
 

@@ -1,4 +1,4 @@
-import { Outlet, useNavigate, useParams } from "react-router";
+import { useParams, Outlet } from "react-router";
 import { useFetch } from "../../hooks/useFetch";
 import type { Post } from "../../types";
 import { isValidTopic } from "../../utils";
@@ -9,7 +9,7 @@ export default function TopicPage() {
 
    // const nav = useNavigate();
 
-   const { data: posts, isError, isLoading } = useFetch<Post[]>([`topic-${topic}`], `/api/topics/${topic}`, {}, {
+   const { data: posts, isError, isLoading } = useFetch<Post[]>([`topic-${topic}`], `/topics/${topic}`, {
       enabled: isValidTopic(topic),
    });
 

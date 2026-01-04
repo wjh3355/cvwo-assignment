@@ -43,6 +43,11 @@ export type Comment = {
 	downvoters: string[];
 };
 
+export interface LoginFields {
+   username: string;
+   password: string;
+}
+
 // export type ForumState = {
 // 	posts: Record<string, Post>; // keyed by postId
 // 	comments: Record<string, Comment[]>; // keyed by postId

@@ -5,12 +5,16 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router';
 import useUser from '../hooks/useUser';
+import { logoutHandler } from './auth/logInOutHandlers';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function Navbar() {
 
    const nav = useNavigate();
 
-   const { data: user } = useUser();
+   const { data: user, isLoading } = useUser();
+
+   const qc = useQueryClient()
 
    return (
       <Box sx={{ flexGrow: 1 }}>
@@ -32,9 +36,9 @@ export default function Navbar() {
                   className='cursor-pointer'
                   onClick={() => nav('/')}
                >
-                  Forum123
+                  TalkSpace
                </Typography>
-               {user ? (
+               {user && !isLoading ? (
                   <>
                      <Typography 
                         variant="body1" 
@@ -45,7 +49,7 @@ export default function Navbar() {
                      </Typography>
                      <Button 
                         color="inherit"
-                        onClick={() => nav('/logout')}
+                        onClick={() => logoutHandler(qc, nav)}
                      >
                         Logout
                      </Button>

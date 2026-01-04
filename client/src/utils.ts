@@ -1,4 +1,4 @@
-import { TOPICS } from "./consts";
+import { TOPICS } from "./config";
 import type { Topic } from "./types";
 
 export function capitalise(str: string): string {
@@ -7,5 +7,5 @@ export function capitalise(str: string): string {
 }
 
 export function isValidTopic(t: string | undefined): t is Topic {
-   return t !== undefined && TOPICS.includes(t as Topic);
+	return t !== undefined && TOPICS.includes(t as Topic);
 }
