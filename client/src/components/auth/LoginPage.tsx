@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import type { LoginFields } from "../../types";
 import { loginHandler } from "./handlers";
+import { Button, TextField } from "@mui/material";
 
 export default function Login() {
 
@@ -35,34 +36,42 @@ export default function Login() {
 
          <fieldset>
             <legend>Username</legend>
-            <input
+            <TextField
                {...register("username")}
                onBlur={() => trigger("username")}
                autoFocus={true}
-            />
+               variant="standard"
+               />
             <span>{errors.username?.message}</span>
          </fieldset>
 
          <fieldset>
             <legend>Password</legend>
-            <input
+            <TextField
                {...register("password")}
                type="password"
                onBlur={() => trigger("password")}
+               variant="standard"
             />
             <span>{errors.password?.message}</span>
          </fieldset>
 
          <div>
-            <button
+            <Button
                type="submit"
                disabled={!isDirty || !isValid || isSubmitting}
             >
                {isSubmitting
-                  ? <span />
+                  ? "Logging in..."
                   : "Log In"
                }
-            </button>
+            </Button>
+            <Button
+               type="button"
+               onClick={() => nav("/auth/register")}
+            >
+               No account? Regsiter here.
+            </Button>
          </div>
 
       </form>

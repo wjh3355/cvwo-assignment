@@ -78,6 +78,14 @@ func main() {
 	// logout endpoint
 	router.POST("/logout", auth.Logout())
 
+	// register endpoint
+	router.POST("/register", auth.Register(pool, jwtSecret))
+
+
+
+
+	
+
 	soft := router.Group("/")
 	soft.Use(middleware.SoftAuthMiddleware(jwtSecret))
 

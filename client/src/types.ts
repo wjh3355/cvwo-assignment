@@ -48,6 +48,12 @@ export interface LoginFields {
    password: string;
 }
 
+export interface RegisterFields {
+   username: string;
+   password: string;
+   confirmPassword: string;
+}
+
 export type VoteType = 0 | 1 | -1;
 
 // export type ForumState = {

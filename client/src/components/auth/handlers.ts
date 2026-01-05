@@ -3,7 +3,7 @@ import { api } from "../../config";
 import toast from "react-hot-toast";
 import type { NavigateFunction } from "react-router";
 import { isAxiosError } from "axios";
-import type { LoginFields, User } from "../../types";
+import type { LoginFields, RegisterFields, User } from "../../types";
 import type { UseFormReset } from "react-hook-form";
 
 export async function logoutHandler(qc: QueryClient, nav: NavigateFunction) {
@@ -25,6 +25,42 @@ export async function logoutHandler(qc: QueryClient, nav: NavigateFunction) {
             toast.error(`Logout failed: ${error.response.data.error}.`);
          } else {
             toast.error(`Logout failed: ${error.request}.`);
+         }
+      } else {
+         toast.error("An unknown error occured. Try again later.");
+      }
+   }
+}
+
+export async function registerHandler(data: RegisterFields, qc: QueryClient, nav: NavigateFunction, reset: UseFormReset<RegisterFields>) {
+
+   const { username, password } = data;
+
+   try {
+
+      qc.clear()
+
+      const res = await api.post<User>("/register", { username, password })
+
+      const newUser = res.data
+
+      qc.setQueryData(['current-user'], newUser);
+
+      reset();
+
+      toast.success("Your account has been created!");
+
+      nav("/");
+
+   } catch (error) {
+      
+      console.log(`Registering for ${username} unsuccessful: \n${error}`);
+
+      if (isAxiosError(error)) {
+         if (error.response) {
+            toast.error(`Register failed: ${error.response.data.error}.`);
+         } else {
+            toast.error(`Register failed: ${error.request}.`);
          }
       } else {
          toast.error("An unknown error occured. Try again later.");
@@ -67,7 +103,3 @@ export async function loginHandler(data: LoginFields, qc: QueryClient, nav: Navi
       }
    }
 }
-
-// export async function registerHandler(data: LoginFields, qc: QueryClient, nav: NavigateFunction) {
-//    // TODO
-// }

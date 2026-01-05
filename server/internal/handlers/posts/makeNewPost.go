@@ -7,8 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"server/internal/models"
-	"server/internal/utils"
 )
 
 type NewPostRequest struct {
@@ -28,7 +26,7 @@ func MakeNewPost(pool *pgxpool.Pool) gin.HandlerFunc {
 			return
 		}
 
-		u, _ := c.Get("user")
-		user := u.(models.User)
+		// u, _ := c.Get("user")
+		// user := u.(models.User)
 	}
 }
