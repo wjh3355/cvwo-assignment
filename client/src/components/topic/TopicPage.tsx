@@ -5,15 +5,20 @@ import { formatDate, isValidTopic } from "../../utils";
 import NotFound from "../NotFound";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import PostVoteDisplay from "../voting/PostVoteDisplay";
+import { Box, Typography } from "@mui/material";
+import useUser from "../../hooks/useUser";
 
 export default function TopicPage() {
    const { topic } = useParams();
 
    const nav = useNavigate();
 
-   const { data: posts, isError, isLoading } = useFetch<Post[]>([`topic-${topic}`], `/posts/${topic}`, {
+   const { data: posts, isError, isLoading } = useFetch<Post[]>(["posts", topic!], `/posts/${topic}`, {
       enabled: isValidTopic(topic),
    });
+
+   const { isError: useUserError } = useUser()
 
    if (!isValidTopic(topic)) {
       return <NotFound />;
@@ -28,18 +33,27 @@ export default function TopicPage() {
          {posts && posts.length > 0 && (
             <ul>
                {posts.map((post) => (
-                  <li 
+                  <li
                      key={post.id}
                      className="hover:cursor-pointer"
                      onClick={() => nav(`/${topic}/${post.id}`)}
                   >
                      <Card>
                         <CardContent>
-                           <p>#{post.id}</p>
-                           <h2 className="text-2xl">{post.title}</h2>
-                           <p>{post.description}</p>
-                           <p className="text-sm text-gray-500">Posted by {post.postedBy.username} on {formatDate(post.postedOn)}</p>
-                           <p className="text-sm text-gray-500">{post.commentCount} comments | {post.voteScore} votes | Your vote: {post.userVote ?? "Not logged in"}</p>
+                           <Box>
+                              <Typography variant="caption" color="text.secondary">
+                                 #{post.id} | Posted by <strong>{post.postedBy.username}</strong> | {formatDate(post.postedOn)} | {post.commentCount} comments
+                              </Typography>
+                           </Box>
+                           <Typography variant="h5">
+                              {post.title}
+                           </Typography>
+                           <Typography variant="body2" color="text.secondary" noWrap>
+                              {post.description}
+                           </Typography>
+                           <div onClick={e => e.stopPropagation()}>
+                              <PostVoteDisplay post={post} isUserAuthenticated={!useUserError} topic={topic} />
+                           </div>
                         </CardContent>
                      </Card>
                   </li>

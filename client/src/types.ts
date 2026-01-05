@@ -48,6 +48,8 @@ export interface LoginFields {
    password: string;
 }
 
+export type VoteType = 0 | 1 | -1;
+
 // export type ForumState = {
 // 	posts: Record<string, Post>; // keyed by postId
 // 	comments: Record<string, Comment[]>; // keyed by postId

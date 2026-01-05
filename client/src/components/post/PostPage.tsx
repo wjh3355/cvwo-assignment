@@ -3,6 +3,7 @@ import NotFound from "../NotFound";
 import { isValidTopic } from "../../utils";
 import { useFetch } from "../../hooks/useFetch";
 import type { Post, Comment } from "../../types";
+import CommentVoteDisplay from "../voting/CommentVoteDisplay";
 
 export default function PostPage() {
    const { topic, postId } = useParams();
@@ -58,9 +59,7 @@ export default function PostPage() {
                         By {comment.commentedBy.username} on{" "}
                         {new Date(comment.commentedOn).toLocaleString()}
                      </p>
-                     <p className="text-sm text-gray-500">
-                        {comment.voteScore} votes | Your vote: {typeof comment.userVote === "number" ? comment.userVote : "Not logged in"}
-                     </p>
+                     <CommentVoteDisplay comment={comment} isUserAuthenticated={true} postId={postId!}/>
                   </li>
                ))}
             </ul>

@@ -8,6 +8,7 @@ import GenericLoading from "./components/GenericLoading";
 import AuthRoutesWrapper from "./components/auth/AuthWrapper";
 import Navbar from "./components/Navbar";
 import Login from "./components/auth/LoginPage";
+import MainLayout from "./components/MainLayout";
 
 const NotFound = lazy(() => import("./components/NotFound"));
 const ErrorPage = lazy(() => import("./components/ErrorPage"));
@@ -27,19 +28,16 @@ export default function App() {
                <Navbar/>
                <Suspense fallback={<GenericLoading/>}>
                   <Routes>
-
-                     <Route index element={<Home/>}/>
-
-                     <Route path=":topic" element={<TopicPage />} />
-                     <Route path=":topic/:postId" element={<PostPage />} />
-
-                     <Route path="auth" element={<AuthRoutesWrapper />}>
-                        <Route index element={<Login/>}/>
-                        <Route path="register" element={<div>Register Page</div>}/>
+                     <Route element={<MainLayout />}>
+                        <Route index element={<Home/>}/>
+                        <Route path=":topic" element={<TopicPage />} />
+                        <Route path=":topic/:postId" element={<PostPage />} />
+                        <Route path="auth" element={<AuthRoutesWrapper />}>
+                           <Route index element={<Login/>}/>
+                           <Route path="register" element={<div>Register Page</div>}/>
+                        </Route>
+                        <Route path="*" element={<NotFound />} />
                      </Route>
-
-                     <Route path="*" element={<NotFound />} />
-
                   </Routes>
                </Suspense>
             </ErrorBoundary>

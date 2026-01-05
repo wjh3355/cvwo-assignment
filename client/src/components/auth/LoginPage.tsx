@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import type { LoginFields } from "../../types";
-import { loginHandler } from "./logInOutHandlers";
+import { loginHandler } from "./handlers";
 
 export default function Login() {
 
@@ -58,9 +58,9 @@ export default function Login() {
                type="submit"
                disabled={!isDirty || !isValid || isSubmitting}
             >
-               {isSubmitting 
-                  ?  <span/>
-                  :  "Log In"
+               {isSubmitting
+                  ? <span />
+                  : "Log In"
                }
             </button>
          </div>

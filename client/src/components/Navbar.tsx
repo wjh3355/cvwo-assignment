@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router';
 import useUser from '../hooks/useUser';
-import { logoutHandler } from './auth/logInOutHandlers';
+import { logoutHandler } from './auth/handlers';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function Navbar() {
@@ -29,9 +29,9 @@ export default function Navbar() {
                >
                   <MenuIcon />
                </IconButton> */}
-               <Typography 
-                  variant="h6" 
-                  component="div" 
+               <Typography
+                  variant="h6"
+                  component="div"
                   sx={{ flexGrow: 1 }}
                   className='cursor-pointer'
                   onClick={() => nav('/')}
@@ -40,14 +40,14 @@ export default function Navbar() {
                </Typography>
                {user && !isLoading ? (
                   <>
-                     <Typography 
-                        variant="body1" 
-                        component="div" 
+                     <Typography
+                        variant="body1"
+                        component="div"
                         sx={{ marginRight: 2 }}
                      >
                         Welcome, {user.username}
                      </Typography>
-                     <Button 
+                     <Button
                         color="inherit"
                         onClick={() => logoutHandler(qc, nav)}
                      >
@@ -55,7 +55,7 @@ export default function Navbar() {
                      </Button>
                   </>
                ) : (
-                  <Button 
+                  <Button
                      color="inherit"
                      onClick={() => nav('/auth')}
                   >

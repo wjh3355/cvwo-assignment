@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/gin-contrib/cors"
@@ -14,6 +13,7 @@ import (
 	"server/internal/db"
 	"server/internal/handlers/auth"
 	"server/internal/handlers/posts"
+	"server/internal/handlers/comments"
 	"server/internal/middleware"
 )
 
@@ -29,17 +29,16 @@ func main() {
 
 	// check whether a JWT_SECRET env variable is set
 	secret := os.Getenv("JWT_SECRET")
-	fmt.Println(secret)
 	if secret == "" { log.Fatal("JWT_SECRET environment variable is not set") }
 	jwtSecret := []byte(secret)
 
 	// set gin to release mode for production
 	// gin.SetMode(gin.ReleaseMode)
 
-	r := gin.Default()
+	router := gin.Default()
 	
 	// CORS configuration
-	r.Use(cors.New(cors.Config{
+	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:5173"},
 		AllowMethods:     []string{"GET", "POST", "DELETE", "PATCH"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
@@ -49,10 +48,10 @@ func main() {
 	}))
 
 	// Trusting localhost
-	r.SetTrustedProxies([]string{"127.0.0.1"})
+	router.SetTrustedProxies([]string{"127.0.0.1"})
 
 	// sanity check endpoint
-	r.GET(
+	router.GET(
 		"/health", 
 		func(c *gin.Context) {
 			c.JSON(200, gin.H{"status": "ok"})
@@ -64,18 +63,19 @@ func main() {
 	/////////////////////////////////////
 
 	// login endpoint
-	r.POST("/login", auth.Login(pool, jwtSecret))
+	router.POST("/login", auth.Login(pool, jwtSecret))
 
 	// check auth endpoint
-	r.GET("/check-auth", auth.CheckAuth(jwtSecret))
+	router.GET("/check-auth", auth.CheckAuth(jwtSecret))
 
 	// logout endpoint
-	r.POST("/logout", auth.Logout())
+	router.POST("/logout", auth.Logout())
 
-	// endpoints using soft auth
-
-	soft := r.Group("/")
+	soft := router.Group("/")
 	soft.Use(middleware.SoftAuthMiddleware(jwtSecret))
+
+	hard := router.Group("/")
+	hard.Use(middleware.HardAuthMiddleware(jwtSecret))
 
 	/////////////////////////////////////
 	// POSTS ENDPOINTS
@@ -89,8 +89,18 @@ func main() {
 	/////////////////////////////////////
 
 	// get comments of specific post endpoint
-	soft.GET("/comments/:postId", posts.GetCommentsofPost(pool))
+	soft.GET("/comments/:postId", comments.GetCommentsofPost(pool))
+
+	/////////////////////////////////////
+	// VOTING ENDPOINTS
+	/////////////////////////////////////
+
+	// vote on post endpoint
+	hard.POST("/posts/vote", posts.VoteOnPost(pool))
+
+	// vote on comment endpoint
+	hard.POST("/comments/vote", comments.VoteOnComment(pool))
 
 	// run the server at port 8080
-	r.Run(":8080")
+	router.Run(":8080")
 }
