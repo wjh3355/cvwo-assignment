@@ -1,15 +1,17 @@
-import { useParams, Outlet } from "react-router";
+import { useParams, Outlet, useNavigate } from "react-router";
 import { useFetch } from "../../hooks/useFetch";
 import type { Post } from "../../types";
-import { isValidTopic } from "../../utils";
+import { formatDate, isValidTopic } from "../../utils";
 import NotFound from "../NotFound";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 
 export default function TopicPage() {
    const { topic } = useParams();
 
-   // const nav = useNavigate();
+   const nav = useNavigate();
 
-   const { data: posts, isError, isLoading } = useFetch<Post[]>([`topic-${topic}`], `/topics/${topic}`, {
+   const { data: posts, isError, isLoading } = useFetch<Post[]>([`topic-${topic}`], `/posts/${topic}`, {
       enabled: isValidTopic(topic),
    });
 
@@ -26,9 +28,20 @@ export default function TopicPage() {
          {posts && posts.length > 0 && (
             <ul>
                {posts.map((post) => (
-                  <li key={post.id}>
-                     <h2>{post.title}</h2>
-                     <p>{post.description}</p>
+                  <li 
+                     key={post.id}
+                     className="hover:cursor-pointer"
+                     onClick={() => nav(`/${topic}/${post.id}`)}
+                  >
+                     <Card>
+                        <CardContent>
+                           <p>#{post.id}</p>
+                           <h2 className="text-2xl">{post.title}</h2>
+                           <p>{post.description}</p>
+                           <p className="text-sm text-gray-500">Posted by {post.postedBy.username} on {formatDate(post.postedOn)}</p>
+                           <p className="text-sm text-gray-500">{post.commentCount} comments | {post.voteScore} votes | Your vote: {post.userVote ?? "Not logged in"}</p>
+                        </CardContent>
+                     </Card>
                   </li>
                ))}
             </ul>

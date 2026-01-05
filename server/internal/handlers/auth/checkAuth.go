@@ -1,14 +1,14 @@
-package handlers
+package auth
 
 import (
+	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func CheckAuth() gin.HandlerFunc {
+func CheckAuth(jwtSecret []byte) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		tokenStr, err := c.Cookie("forum_token")
@@ -28,7 +28,7 @@ func CheckAuth() gin.HandlerFunc {
 				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 					return nil, jwt.ErrTokenMalformed
 				}
-				return []byte(os.Getenv("JWT_SECRET")), nil
+				return jwtSecret, nil
 			},
 		)
 
@@ -37,6 +37,8 @@ func CheckAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+
+		fmt.Println("User auth checked", (*claims).Username)
 
 		c.JSON(http.StatusOK, gin.H{
 			"user_id":  (*claims).UserID,

@@ -15,7 +15,7 @@ export default function PostPage() {
       isError: postsError,
    } = useFetch<Post[]>(
       ['posts', topic!],
-      `/topics/${topic}`,
+      `/posts/${topic}`,
       { enabled: validTopic }
    );
 
@@ -29,12 +29,13 @@ export default function PostPage() {
       { enabled: validTopic && !!postId }
    );
 
+
    if (!validTopic) return <NotFound />;
 
    if (postsLoading) return <div>Loading...</div>;
    if (postsError || !posts) return <div>Error loading post.</div>;
 
-   const post = posts.find(p => p.id === postId);
+   const post = posts.find(p => p.id == postId);
    if (!post) return <NotFound />;
 
    if (commentsLoading) return <div>Loading comments...</div>;
@@ -51,11 +52,14 @@ export default function PostPage() {
          ) : (
             <ul>
                {comments.map(comment => (
-                  <li key={comment.id}>
-                     <p>{comment.content}</p>
-                     <p>
+                  <li key={comment.id} className="my-3">
+                     <p>#{comment.id} | {comment.content}</p>
+                     <p className="text-sm text-gray-500">
                         By {comment.commentedBy.username} on{" "}
                         {new Date(comment.commentedOn).toLocaleString()}
+                     </p>
+                     <p className="text-sm text-gray-500">
+                        {comment.voteScore} votes | Your vote: {typeof comment.userVote === "number" ? comment.userVote : "Not logged in"}
                      </p>
                   </li>
                ))}

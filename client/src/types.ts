@@ -25,22 +25,22 @@ export type Post = {
 	id: string; // unique identifier
 	topic: Topic;
 	postedBy: User;
-	postedOn: Date;
+	postedOn: string;
 	title: string;
 	description: string;
    commentCount: number;
-   upvoters: string[]; // array of user IDs who upvoted
-   downvoters: string[]; // array of user IDs who downvoted
+   voteScore: number;
+   userVote: number | null; // -1 for downvote, 0 for no vote, 1 for upvote, null if not logged in
 };
 
 export type Comment = {
-	postId: string; // associated post identifier
 	id: string; // unique identifier
+	postId: string; // associated post identifier
 	commentedBy: User;
-	commentedOn: Date;
+	commentedOn: string;
 	content: string;
-	upvoters: string[];
-	downvoters: string[];
+   voteScore: number;
+   userVote: number | null; // -1 for downvote, 0 for no vote, 1 for upvote, null if not logged in
 };
 
 export interface LoginFields {

@@ -10,8 +10,6 @@ export function useFetch<T>(key: string[], url: string, queryOptions?: Omit<UseQ
       try {
          const response = await api.get<T>(url);
          
-         console.log(response.data)
-
          return response.data;
 
       } catch (error) {

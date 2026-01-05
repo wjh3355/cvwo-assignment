@@ -23,7 +23,7 @@ func Authenticate(pool *pgxpool.Pool, username string, password string) (models.
 		ctx,
 		"SELECT id, username, password_hash FROM users WHERE username=$1",
 		username,
-	).Scan(&user.ID, &user.Username, &user.Password)
+	).Scan(&user.ID, &user.Username, &user.PasswordHash)
 
 	if err != nil {
 		if err.Error() == "no rows in result set" {
@@ -34,7 +34,7 @@ func Authenticate(pool *pgxpool.Pool, username string, password string) (models.
 		return models.User{}, err
 	}
 
-	if !CheckPasswordHash(password, user.Password) {
+	if !CheckPasswordHash(password, user.PasswordHash) {
 		fmt.Println("Password mismatch for user:", username)
 		return models.User{}, nil
 	}

@@ -1,9 +1,8 @@
-package handlers
+package auth
 
 import (
 	"fmt"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -12,8 +11,6 @@ import (
 
 	"server/internal/utils"
 )
-
-var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
 type LoginRequest struct {
 	Username string `json:"username" binding:"required"`
@@ -31,7 +28,7 @@ type JWTClaims struct {
 	jwt.RegisteredClaims
 }
 
-func Login(pool *pgxpool.Pool) gin.HandlerFunc {
+func Login(pool *pgxpool.Pool, jwtSecret []byte) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var req LoginRequest
 		if err := c.ShouldBindJSON(&req); err != nil {

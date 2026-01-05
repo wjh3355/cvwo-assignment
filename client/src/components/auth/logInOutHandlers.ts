@@ -12,7 +12,7 @@ export async function logoutHandler(qc: QueryClient, nav: NavigateFunction) {
 
       await api.post("/logout");
 
-      qc.removeQueries({ queryKey: ['current-user'], exact: true });
+      qc.clear()
 
       toast.success("Logout successful");
 
@@ -38,7 +38,7 @@ export async function loginHandler(data: LoginFields, qc: QueryClient, nav: Navi
 
    try {
 
-      qc.removeQueries({ queryKey: ['current-user'], exact: true });
+      qc.clear()
 
       const res = await api.post<User>("/login", { username, password })
 
