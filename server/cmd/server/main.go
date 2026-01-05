@@ -14,6 +14,7 @@ import (
 	"server/internal/handlers/auth"
 	"server/internal/handlers/posts"
 	"server/internal/handlers/comments"
+	"server/internal/handlers/voting"
 	"server/internal/middleware"
 )
 
@@ -32,6 +33,12 @@ func main() {
 	if secret == "" { log.Fatal("JWT_SECRET environment variable is not set") }
 	jwtSecret := []byte(secret)
 
+	// get frontend url from environment variable
+	frontendURL := os.Getenv("FRONTEND_URL")
+	if frontendURL == "" {
+		frontendURL = "http://localhost:5173"
+	}
+
 	// set gin to release mode for production
 	// gin.SetMode(gin.ReleaseMode)
 
@@ -39,7 +46,7 @@ func main() {
 	
 	// CORS configuration
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowOrigins:     []string{frontendURL},
 		AllowMethods:     []string{"GET", "POST", "DELETE", "PATCH"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -95,11 +102,10 @@ func main() {
 	// VOTING ENDPOINTS
 	/////////////////////////////////////
 
-	// vote on post endpoint
-	hard.POST("/posts/vote", posts.VoteOnPost(pool))
+	// vote on post or comment endpoint (REQUIRES AUTH)
+	hard.POST("/vote", voting.VoteOnPostOrComment(pool))
 
-	// vote on comment endpoint
-	hard.POST("/comments/vote", comments.VoteOnComment(pool))
+	// TODO: add POST, PATCH, DELETE endpoints for posts and comments
 
 	// run the server at port 8080
 	router.Run(":8080")

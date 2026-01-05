@@ -1,13 +1,13 @@
-import { useParams, Outlet, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { useFetch } from "../../hooks/useFetch";
 import type { Post } from "../../types";
 import { formatDate, isValidTopic } from "../../utils";
 import NotFound from "../NotFound";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import PostVoteDisplay from "../voting/PostVoteDisplay";
 import { Box, Typography } from "@mui/material";
 import useUser from "../../hooks/useUser";
+import GenericVoteDisplay from "../voting/GenericVoteDisplay";
 
 export default function TopicPage() {
    const { topic } = useParams();
@@ -52,7 +52,7 @@ export default function TopicPage() {
                               {post.description}
                            </Typography>
                            <div onClick={e => e.stopPropagation()}>
-                              <PostVoteDisplay post={post} isUserAuthenticated={!useUserError} topic={topic} />
+                              <GenericVoteDisplay thing={post} isUserAuthenticated={!useUserError} topic={topic} forWhat="post" />
                            </div>
                         </CardContent>
                      </Card>

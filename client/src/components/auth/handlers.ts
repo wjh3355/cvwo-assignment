@@ -68,6 +68,6 @@ export async function loginHandler(data: LoginFields, qc: QueryClient, nav: Navi
    }
 }
 
-export async function registerHandler(data: LoginFields, qc: QueryClient, nav: NavigateFunction) {
-   // TODO
-}
+// export async function registerHandler(data: LoginFields, qc: QueryClient, nav: NavigateFunction) {
+//    // TODO
+// }

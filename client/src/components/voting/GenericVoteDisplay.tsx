@@ -1,39 +1,41 @@
 import { Stack, IconButton, Typography } from "@mui/material";
 import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
-import type { Post, Topic, VoteType } from "../../types";
+import type { Comment, Post, Topic, VoteType } from "../../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../../config";
 import toast from "react-hot-toast";
-   
-interface PostVoteDisplayProps {
-   post: Post;
+
+interface VoteDisplayProps<T extends Post | Comment> {
+   thing: T;
    isUserAuthenticated: boolean;
-   topic: Topic;
+   topic?: Topic;
+   postId?: string;
+   forWhat: "post" | "comment";
 }
 
-export default function PostVoteDisplay({ post, isUserAuthenticated, topic }: PostVoteDisplayProps) {
+export default function GenericVoteDisplay<T extends Post | Comment>({ thing, isUserAuthenticated, topic, postId, forWhat }: VoteDisplayProps<T>) {
 
-   const { userVote, voteScore, id: postId } = post
+   const { userVote, voteScore, id } = thing
 
-   const queryKey = ["posts", topic];
+   const queryKey = forWhat === "post" ? ["posts", topic] : ["comments", postId];
 
    const qc = useQueryClient()
 
    const mut = useMutation({
-      mutationFn: (voteType: VoteType) => api.post("/posts/vote", { postId, voteType }),
+      mutationFn: (voteType: VoteType) => api.post("/vote", { postOrCommentId: id, voteType, postOrComment: forWhat }),
       onMutate: async (newVote: VoteType) => {
          await qc.cancelQueries({ queryKey })
-         const prevData = qc.getQueryData<Post[]>(queryKey)
-         qc.setQueryData<Post[]>(queryKey, (oldData) => {
+         const prevData = qc.getQueryData<T[]>(queryKey)
+         qc.setQueryData<T[]>(queryKey, (oldData) => {
             if (!oldData) return [];
-            return oldData.map((p) => p.id !== postId
-                  ? p
-                  : {
-                     ...p,
-                     userVote: newVote,
-                     voteScore: voteScore + newVote - userVote!,
-                    }
+            return oldData.map((porc) => porc.id !== id
+               ? porc
+               : {
+                  ...porc,
+                  userVote: newVote,
+                  voteScore: voteScore + newVote - userVote!,
+               }
             );
          });
 

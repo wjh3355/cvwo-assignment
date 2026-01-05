@@ -3,7 +3,8 @@ import NotFound from "../NotFound";
 import { isValidTopic } from "../../utils";
 import { useFetch } from "../../hooks/useFetch";
 import type { Post, Comment } from "../../types";
-import CommentVoteDisplay from "../voting/CommentVoteDisplay";
+import GenericVoteDisplay from "../voting/GenericVoteDisplay";
+import useUser from "../../hooks/useUser";
 
 export default function PostPage() {
    const { topic, postId } = useParams();
@@ -19,6 +20,8 @@ export default function PostPage() {
       `/posts/${topic}`,
       { enabled: validTopic }
    );
+
+   const { isError: useUserError } = useUser()
 
    const {
       data: comments,
@@ -59,7 +62,7 @@ export default function PostPage() {
                         By {comment.commentedBy.username} on{" "}
                         {new Date(comment.commentedOn).toLocaleString()}
                      </p>
-                     <CommentVoteDisplay comment={comment} isUserAuthenticated={true} postId={postId!}/>
+                     <GenericVoteDisplay thing={comment} isUserAuthenticated={!useUserError} postId={postId} forWhat="comment" />
                   </li>
                ))}
             </ul>
