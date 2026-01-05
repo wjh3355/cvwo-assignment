@@ -57,9 +57,9 @@ func GetCommentsofPost(pool *pgxpool.Pool) gin.HandlerFunc {
 		for rows.Next() {
 			var cmt models.Comment
 			err := rows.Scan(
-				&cmt.ID, 
-				&cmt.PostID, 
-				&cmt.Content, 
+				&cmt.ID,
+				&cmt.PostID,
+				&cmt.Content,
 				&cmt.CommentedOn,
 				&cmt.CommentedBy.ID,
 				&cmt.CommentedBy.Username,

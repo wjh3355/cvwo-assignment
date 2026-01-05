@@ -22,8 +22,8 @@ func CheckAuth(jwtSecret []byte) gin.HandlerFunc {
 		claims := &JWTClaims{}
 
 		token, err := jwt.ParseWithClaims(
-			tokenStr, 
-			claims, 
+			tokenStr,
+			claims,
 			func(token *jwt.Token) (any, error) {
 				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 					return nil, jwt.ErrTokenMalformed

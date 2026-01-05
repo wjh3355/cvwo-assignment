@@ -69,10 +69,10 @@ func GetPostsOfTopic(pool *pgxpool.Pool) gin.HandlerFunc {
 		for rows.Next() {
 			var p models.Post
 			err := rows.Scan(
-				&p.ID, 
-				&p.Topic, 
-				&p.Title, 
-				&p.Description, 
+				&p.ID,
+				&p.Topic,
+				&p.Title,
+				&p.Description,
 				&p.PostedOn,
 				&p.PostedBy.ID,
 				&p.PostedBy.Username,

@@ -14,7 +14,7 @@ import (
 func SoftAuthMiddleware(jwtSecret []byte) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		user := models.User{} 
+		user := models.User{}
 
 		tokenStr, err := c.Cookie("forum_token")
 
@@ -28,8 +28,8 @@ func SoftAuthMiddleware(jwtSecret []byte) gin.HandlerFunc {
 		claims := &auth.JWTClaims{}
 
 		token, err := jwt.ParseWithClaims(
-			tokenStr, 
-			claims, 
+			tokenStr,
+			claims,
 			func(token *jwt.Token) (any, error) {
 				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 					return nil, jwt.ErrTokenMalformed
@@ -59,7 +59,7 @@ func SoftAuthMiddleware(jwtSecret []byte) gin.HandlerFunc {
 func HardAuthMiddleware(jwtSecret []byte) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		user := models.User{} 
+		user := models.User{}
 
 		tokenStr, err := c.Cookie("forum_token")
 
@@ -72,8 +72,8 @@ func HardAuthMiddleware(jwtSecret []byte) gin.HandlerFunc {
 		claims := &auth.JWTClaims{}
 
 		token, err := jwt.ParseWithClaims(
-			tokenStr, 
-			claims, 
+			tokenStr,
+			claims,
 			func(token *jwt.Token) (any, error) {
 				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 					return nil, jwt.ErrTokenMalformed

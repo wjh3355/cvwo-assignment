@@ -11,9 +11,9 @@ import (
 )
 
 type VoteRequest struct {
-	PostOrCommentID   int  `json:"postOrCommentId" binding:"required"`
-	VoteType int  `json:"voteType"` // 1 for upvote, -1 for downvote, 0 for removing vote
-	PostOrComment string `json:"postOrComment" binding:"required"` // either "post" or "comment"
+	PostOrCommentID int    `json:"postOrCommentId" binding:"required"`
+	VoteType        int    `json:"voteType"`                         // 1 for upvote, -1 for downvote, 0 for removing vote
+	PostOrComment   string `json:"postOrComment" binding:"required"` // either "post" or "comment"
 }
 
 func VoteOnPostOrComment(pool *pgxpool.Pool) gin.HandlerFunc {

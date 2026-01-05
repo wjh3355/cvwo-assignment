@@ -19,7 +19,7 @@ type LoginRequest struct {
 
 type LoginResponse struct {
 	Username string `json:"username"`
-	ID int `json:"id"`
+	ID       int    `json:"id"`
 }
 
 type JWTClaims struct {
@@ -73,18 +73,18 @@ func Login(pool *pgxpool.Pool, jwtSecret []byte) gin.HandlerFunc {
 		fmt.Println("User logged in:", user.Username)
 
 		c.SetCookie(
-			"forum_token",          		// cookie name
-			tokenString,             		// value
-			86400,                   		// max age (seconds)
-			"/",                     		// path
-			"",                      		// domain (empty = current)
-			gin.Mode() == gin.ReleaseMode,// secure (true in production HTTPS)
-			true,                    		// httpOnly
+			"forum_token",                 // cookie name
+			tokenString,                   // value
+			86400,                         // max age (seconds)
+			"/",                           // path
+			"",                            // domain (empty = current)
+			gin.Mode() == gin.ReleaseMode, // secure (true in production HTTPS)
+			true,                          // httpOnly
 		)
-		
+
 		c.JSON(http.StatusOK, LoginResponse{
 			Username: user.Username,
-			ID: user.ID,
+			ID:       user.ID,
 		})
 	}
 }

@@ -12,8 +12,8 @@ import (
 
 	"server/internal/db"
 	"server/internal/handlers/auth"
-	"server/internal/handlers/posts"
 	"server/internal/handlers/comments"
+	"server/internal/handlers/posts"
 	"server/internal/handlers/voting"
 	"server/internal/middleware"
 )
@@ -25,12 +25,16 @@ func main() {
 
 	// initialize database connection pool
 	pool, err := db.NewPostgresPool()
-	if err != nil { log.Fatal(err) }
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer pool.Close()
 
 	// check whether a JWT_SECRET env variable is set
 	secret := os.Getenv("JWT_SECRET")
-	if secret == "" { log.Fatal("JWT_SECRET environment variable is not set") }
+	if secret == "" {
+		log.Fatal("JWT_SECRET environment variable is not set")
+	}
 	jwtSecret := []byte(secret)
 
 	// get frontend url from environment variable
@@ -43,7 +47,7 @@ func main() {
 	// gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
-	
+
 	// CORS configuration
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{frontendURL},
@@ -59,7 +63,7 @@ func main() {
 
 	// sanity check endpoint
 	router.GET(
-		"/health", 
+		"/health",
 		func(c *gin.Context) {
 			c.JSON(200, gin.H{"status": "ok"})
 		},
@@ -80,11 +84,6 @@ func main() {
 
 	// register endpoint
 	router.POST("/register", auth.Register(pool, jwtSecret))
-
-
-
-
-	
 
 	soft := router.Group("/")
 	soft.Use(middleware.SoftAuthMiddleware(jwtSecret))

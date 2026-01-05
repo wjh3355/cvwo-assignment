@@ -84,18 +84,18 @@ func Register(pool *pgxpool.Pool, jwtSecret []byte) gin.HandlerFunc {
 		fmt.Println("Created user and logging them in:", newUser.Username)
 
 		c.SetCookie(
-			"forum_token",          		// cookie name
-			tokenString,             		// value
-			86400,                   		// max age (seconds)
-			"/",                     		// path
-			"",                      		// domain (empty = current)
-			gin.Mode() == gin.ReleaseMode,// secure (true in production HTTPS)
-			true,                    		// httpOnly
+			"forum_token",                 // cookie name
+			tokenString,                   // value
+			86400,                         // max age (seconds)
+			"/",                           // path
+			"",                            // domain (empty = current)
+			gin.Mode() == gin.ReleaseMode, // secure (true in production HTTPS)
+			true,                          // httpOnly
 		)
-		
+
 		c.JSON(http.StatusOK, LoginResponse{
 			Username: newUser.Username,
-			ID: newUser.ID,
+			ID:       newUser.ID,
 		})
 	}
 }
