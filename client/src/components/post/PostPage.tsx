@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import NotFound from "../NotFound";
-import { isValidTopic } from "../../utils";
+import { formatDate, isValidTopic } from "../../utils";
 import { useFetch } from "../../hooks/useFetch";
 import type { Post, Comment } from "../../types";
 import GenericVoteDisplay from "../voting/GenericVoteDisplay";
@@ -59,8 +59,7 @@ export default function PostPage() {
                   <li key={comment.id} className="my-3">
                      <p>#{comment.id} | {comment.content}</p>
                      <p className="text-sm text-gray-500">
-                        By {comment.commentedBy.username} on{" "}
-                        {new Date(comment.commentedOn).toLocaleString()}
+                        <strong>{comment.commentedBy.username}</strong> | {formatDate(comment.commentedOn)}
                      </p>
                      <GenericVoteDisplay thing={comment} isUserAuthenticated={!useUserError} postId={postId} forWhat="comment" />
                   </li>

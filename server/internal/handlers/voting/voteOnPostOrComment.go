@@ -55,7 +55,15 @@ func VoteOnPostOrComment(pool *pgxpool.Pool) gin.HandlerFunc {
 			}
 		}
 
-		if _, err := pool.Exec(c, query, currUserIfAny.ID, req.PostOrCommentID, req.VoteType); err != nil {
+		var err error
+
+		if req.VoteType == 0 {
+			_, err = pool.Exec(c, query, currUserIfAny.ID, req.PostOrCommentID)
+		} else {
+			_, err = pool.Exec(c, query, currUserIfAny.ID, req.PostOrCommentID, req.VoteType)
+		}
+
+		if err != nil {
 			fmt.Println("Error updating vote:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update vote"})
 			c.Abort()
