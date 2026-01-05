@@ -20,7 +20,7 @@ func VoteOnPostOrComment(pool *pgxpool.Pool) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		u, _ := c.Get("user")
-		currUserIfAny := u.(models.User)
+		user := u.(models.User)
 
 		var req VoteRequest
 		if err := c.ShouldBindJSON(&req); err != nil || !(req.PostOrComment == "post" || req.PostOrComment == "comment") {
@@ -58,9 +58,9 @@ func VoteOnPostOrComment(pool *pgxpool.Pool) gin.HandlerFunc {
 		var err error
 
 		if req.VoteType == 0 {
-			_, err = pool.Exec(c, query, currUserIfAny.ID, req.PostOrCommentID)
+			_, err = pool.Exec(c, query, user.ID, req.PostOrCommentID)
 		} else {
-			_, err = pool.Exec(c, query, currUserIfAny.ID, req.PostOrCommentID, req.VoteType)
+			_, err = pool.Exec(c, query, user.ID, req.PostOrCommentID, req.VoteType)
 		}
 
 		if err != nil {
@@ -70,7 +70,7 @@ func VoteOnPostOrComment(pool *pgxpool.Pool) gin.HandlerFunc {
 			return
 		}
 
-		fmt.Println("Vote for", req.PostOrComment, "ID", req.PostOrCommentID, "by user ID", currUserIfAny.ID, "updated successfully: ", req.VoteType)
+		fmt.Println("Vote for", req.PostOrComment, "ID", req.PostOrCommentID, "by user ID", user.ID, "updated successfully: ", req.VoteType)
 
 		c.JSON(http.StatusOK, gin.H{"message": "Vote updated successfully"})
 
