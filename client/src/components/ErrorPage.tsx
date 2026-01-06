@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router"
 
 export default function ErrorPage() {
-
-   const nav = useNavigate();
+   const nav = useNavigate()
 
    return (
       <div>

@@ -1,28 +1,32 @@
-import { useParams, useNavigate } from "react-router";
-import { useFetch } from "../../hooks/useFetch";
-import type { Post } from "../../types";
-import { formatDate, isValidTopic } from "../../utils";
-import NotFound from "../NotFound";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import useUser from "../../hooks/useUser";
-import GenericVoteDisplay from "../voting/GenericVoteDisplay";
+import { useParams, useNavigate } from "react-router"
+import { useFetch } from "../../hooks/useFetch"
+import type { Post } from "../../types"
+import { formatDate, isValidTopic } from "../../utils"
+import NotFound from "../NotFound"
+import Card from "@mui/material/Card"
+import CardContent from "@mui/material/CardContent"
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
+import useUser from "../../hooks/useUser"
+import GenericVoteDisplay from "../voting/GenericVoteDisplay"
 
 export default function TopicPage() {
-   const { topic } = useParams();
+   const { topic } = useParams()
 
-   const nav = useNavigate();
+   const nav = useNavigate()
 
-   const { data: posts, isError, isLoading } = useFetch<Post[]>(["posts", topic!], `/posts/${topic}`, {
+   const {
+      data: posts,
+      isError,
+      isLoading,
+   } = useFetch<Post[]>(["posts", topic!], `/posts/${topic}`, {
       enabled: isValidTopic(topic),
-   });
+   })
 
    const { isError: useUserError } = useUser()
 
    if (!isValidTopic(topic)) {
-      return <NotFound />;
+      return <NotFound />
    }
 
    return (
@@ -42,18 +46,31 @@ export default function TopicPage() {
                      <Card>
                         <CardContent>
                            <Box>
-                              <Typography variant="caption" color="text.secondary">
-                                 #{post.id} | Posted by <strong>{post.postedBy.username}</strong> | {formatDate(post.postedOn)} | {post.commentCount} comments
+                              <Typography
+                                 variant="caption"
+                                 color="text.secondary"
+                              >
+                                 #{post.id} | Posted by{" "}
+                                 <strong>{post.postedBy.username}</strong> |{" "}
+                                 {formatDate(post.postedOn)} |{" "}
+                                 {post.commentCount} comments
                               </Typography>
                            </Box>
-                           <Typography variant="h5">
-                              {post.title}
-                           </Typography>
-                           <Typography variant="body2" color="text.secondary" noWrap>
+                           <Typography variant="h5">{post.title}</Typography>
+                           <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              noWrap
+                           >
                               {post.description}
                            </Typography>
-                           <div onClick={e => e.stopPropagation()}>
-                              <GenericVoteDisplay thing={post} isUserAuthenticated={!useUserError} topic={topic} forWhat="post" />
+                           <div onClick={(e) => e.stopPropagation()}>
+                              <GenericVoteDisplay
+                                 thing={post}
+                                 isUserAuthenticated={!useUserError}
+                                 topic={topic}
+                                 forWhat="post"
+                              />
                            </div>
                         </CardContent>
                      </Card>
@@ -62,5 +79,5 @@ export default function TopicPage() {
             </ul>
          )}
       </div>
-   );
+   )
 }

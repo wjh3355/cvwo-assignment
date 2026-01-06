@@ -1,16 +1,15 @@
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router";
-import { useQueryClient } from "@tanstack/react-query";
-import type { LoginFields } from "../../types";
-import { loginHandler } from "./handlers";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useNavigate } from "react-router"
+import { useQueryClient } from "@tanstack/react-query"
+import type { LoginFields } from "../../types"
+import { loginHandler } from "./handlers"
+import Button from "@mui/material/Button"
+import TextField from "@mui/material/TextField"
 
 export default function Login() {
-
-   const nav = useNavigate();
+   const nav = useNavigate()
 
    // form handler
    const {
@@ -18,7 +17,7 @@ export default function Login() {
       handleSubmit,
       formState: { errors, isValid, isDirty, isSubmitting },
       trigger,
-      reset
+      reset,
    } = useForm<LoginFields>({
       resolver: zodResolver(
          z.object({
@@ -27,12 +26,14 @@ export default function Login() {
          })
       ),
       defaultValues: { username: "", password: "" },
-   });
+   })
 
-   const qc = useQueryClient();
+   const qc = useQueryClient()
 
    return (
-      <form onSubmit={handleSubmit((data) => loginHandler(data, qc, nav, reset))}>
+      <form
+         onSubmit={handleSubmit((data) => loginHandler(data, qc, nav, reset))}
+      >
          <title>Login</title>
 
          <fieldset>
@@ -42,7 +43,7 @@ export default function Login() {
                onBlur={() => trigger("username")}
                autoFocus={true}
                variant="standard"
-               />
+            />
             <span>{errors.username?.message}</span>
          </fieldset>
 
@@ -62,19 +63,12 @@ export default function Login() {
                type="submit"
                disabled={!isDirty || !isValid || isSubmitting}
             >
-               {isSubmitting
-                  ? "Logging in..."
-                  : "Log In"
-               }
+               {isSubmitting ? "Logging in..." : "Log In"}
             </Button>
-            <Button
-               type="button"
-               onClick={() => nav("/auth/register")}
-            >
+            <Button type="button" onClick={() => nav("/auth/register")}>
                No account? Regsiter here.
             </Button>
          </div>
-
       </form>
-   );
-};
+   )
+}

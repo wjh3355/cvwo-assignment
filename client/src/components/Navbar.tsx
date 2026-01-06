@@ -1,18 +1,17 @@
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { useNavigate } from "react-router";
-import useUser from "../hooks/useUser";
-import { logoutHandler } from "./auth/handlers";
-import { useQueryClient } from "@tanstack/react-query";
+import AppBar from "@mui/material/AppBar"
+import Box from "@mui/material/Box"
+import Toolbar from "@mui/material/Toolbar"
+import Typography from "@mui/material/Typography"
+import Button from "@mui/material/Button"
+import { useNavigate } from "react-router"
+import useUser from "../hooks/useUser"
+import { logoutHandler } from "./auth/handlers"
+import { useQueryClient } from "@tanstack/react-query"
 
 export default function Navbar() {
+   const nav = useNavigate()
 
-   const nav = useNavigate();
-
-   const { data: user, isLoading } = useUser();
+   const { data: user, isLoading } = useUser()
 
    const qc = useQueryClient()
 
@@ -33,8 +32,8 @@ export default function Navbar() {
                   variant="h6"
                   component="div"
                   sx={{ flexGrow: 1 }}
-                  className='cursor-pointer'
-                  onClick={() => nav('/')}
+                  className="cursor-pointer"
+                  onClick={() => nav("/")}
                >
                   TalkSpace
                </Typography>
@@ -55,15 +54,12 @@ export default function Navbar() {
                      </Button>
                   </>
                ) : (
-                  <Button
-                     color="inherit"
-                     onClick={() => nav('/auth')}
-                  >
+                  <Button color="inherit" onClick={() => nav("/auth")}>
                      Login
                   </Button>
                )}
             </Toolbar>
          </AppBar>
       </Box>
-   );
+   )
 }

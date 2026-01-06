@@ -1,15 +1,14 @@
 import { useNavigate } from "react-router"
-import { TOPICS } from "../config";
-import { capitalise } from "../utils";
+import { TOPICS } from "../config"
+import { capitalise } from "../utils"
 import Button from "@mui/material/Button"
-import Container from "@mui/material/Container";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
+import Container from "@mui/material/Container"
+import Stack from "@mui/material/Stack"
+import Typography from "@mui/material/Typography"
+import Paper from "@mui/material/Paper"
 
 export default function Home() {
-
-   const nav = useNavigate();
+   const nav = useNavigate()
 
    return (
       <Container maxWidth="md">
@@ -19,7 +18,6 @@ export default function Home() {
             </Typography>
 
             <Paper elevation={3} sx={{ p: 4, textAlign: "center" }}>
-
                <Stack
                   direction="row"
                   flexWrap="wrap"
@@ -34,15 +32,14 @@ export default function Home() {
                         size="large"
                         sx={{
                            minWidth: 140,
-                           textTransform: 'none',
-                           borderRadius: 2
+                           textTransform: "none",
+                           borderRadius: 2,
                         }}
                      >
                         {capitalise(topic)}
                      </Button>
                   ))}
                </Stack>
-
             </Paper>
          </Stack>
       </Container>

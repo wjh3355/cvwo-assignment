@@ -1,38 +1,27 @@
-import { useForm } from "react-hook-form";
-import type { Topic } from "../../types";
-import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
-import { z } from "zod";
-import Button from "@mui/material/Button";
-import { useQueryClient } from "@tanstack/react-query";
-import { api } from "../../config";
-import TextField from "@mui/material/TextField";
-import toast from "react-hot-toast";
-
-interface NewPostForm {
-   title: string;
-   description: string;
-}
-
-interface NewPostData extends NewPostForm {
-   topic: Topic;
-}
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js"
+import { z } from "zod"
+import Button from "@mui/material/Button"
+import { useQueryClient } from "@tanstack/react-query"
+import { api } from "../../config"
+import TextField from "@mui/material/TextField"
+import toast from "react-hot-toast"
 
 interface NewCommentForm {
-   content: string;
+   content: string
 }
 
 interface NewCommentData extends NewCommentForm {
-   postId: number;
+   postId: number
 }
 
 export default function MakeNewComment({ postId }: { postId: number }) {
-
    const {
       register,
       handleSubmit,
       formState: { errors, isValid, isDirty, isSubmitting },
       trigger,
-      reset
+      reset,
    } = useForm<NewCommentForm>({
       resolver: zodResolver(
          z.object({
@@ -40,29 +29,28 @@ export default function MakeNewComment({ postId }: { postId: number }) {
          })
       ),
       defaultValues: { content: "" },
-   });
+   })
 
-   const qc = useQueryClient();
+   const qc = useQueryClient()
 
-   const queryKey = ["comments", String(postId)];
+   const queryKey = ["comments", String(postId)]
 
    async function handleCreateComment(data: NewCommentForm) {
       const postReq: NewCommentData = {
          ...data,
-         postId
-      };
+         postId,
+      }
 
       try {
-         await api.post("/comments", postReq);
+         await api.post("/comments", postReq)
 
-         qc.invalidateQueries({ queryKey });
+         qc.invalidateQueries({ queryKey })
 
-         reset();
+         reset()
 
-         toast.success("Comment created successfully");
-
+         toast.success("Comment created successfully")
       } catch (error) {
-         toast.error("Failed to create comment. Please try again.");
+         toast.error("Failed to create comment. Please try again.")
          console.log(error)
       }
    }

@@ -1,9 +1,12 @@
-import { Outlet } from "react-router";
+import { Outlet } from "react-router"
 
 export default function MainLayout() {
    return (
       <main className="min-h-screen flex flex-col">
-         <section id="main-content" className="grow p-4 md:p-8 flex items-start">
+         <section
+            id="main-content"
+            className="grow p-4 md:p-8 flex items-start"
+         >
             <Outlet />
          </section>
 
@@ -11,5 +14,5 @@ export default function MainLayout() {
             © {new Date().getFullYear()} TalkSpace
          </footer>
       </main>
-   );
-};
+   )
+}
