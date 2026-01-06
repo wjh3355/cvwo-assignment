@@ -1,0 +1,23 @@
+{
+	"name": "cvwo-assignment",
+	"version": "1.0.0",
+	"description": "the winter project submission for CVWO 2026",
+	"homepage": "https://github.com/wjh3355/cvwo-assignment#readme",
+	"bugs": {
+		"url": "https://github.com/wjh3355/cvwo-assignment/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/wjh3355/cvwo-assignment.git"
+	},
+	"license": "MIT",
+	"author": "Wang Jiahua",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"prepare": "husky"
+	},
+	"devDependencies": {
+		"husky": "^9.1.7",
+		"prettier": "^3.7.4"
+	}
+}
