@@ -5,7 +5,8 @@ import { useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import type { LoginFields } from "../../types";
 import { loginHandler } from "./handlers";
-import { Button, TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 
 export default function Login() {
 

@@ -5,7 +5,8 @@ import { formatDate, isValidTopic } from "../../utils";
 import NotFound from "../NotFound";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { Box, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import useUser from "../../hooks/useUser";
 import GenericVoteDisplay from "../voting/GenericVoteDisplay";
 

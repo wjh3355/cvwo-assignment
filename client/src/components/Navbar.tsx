@@ -1,12 +1,12 @@
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router';
-import useUser from '../hooks/useUser';
-import { logoutHandler } from './auth/handlers';
-import { useQueryClient } from '@tanstack/react-query';
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import { useNavigate } from "react-router";
+import useUser from "../hooks/useUser";
+import { logoutHandler } from "./auth/handlers";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Navbar() {
 
@@ -45,7 +45,7 @@ export default function Navbar() {
                         component="div"
                         sx={{ marginRight: 2 }}
                      >
-                        Welcome, {user.username}
+                        Welcome, <strong>{user.username}</strong>
                      </Typography>
                      <Button
                         color="inherit"

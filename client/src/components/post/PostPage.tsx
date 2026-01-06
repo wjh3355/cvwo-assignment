@@ -5,6 +5,11 @@ import { useFetch } from "../../hooks/useFetch";
 import type { Post, Comment } from "../../types";
 import GenericVoteDisplay from "../voting/GenericVoteDisplay";
 import useUser from "../../hooks/useUser";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import MakeNew from "../text/MakeNew";
 
 export default function PostPage() {
    const { topic, postId } = useParams();
@@ -39,7 +44,7 @@ export default function PostPage() {
    if (postsLoading) return <div>Loading...</div>;
    if (postsError || !posts) return <div>Error loading post.</div>;
 
-   const post = posts.find(p => p.id == postId);
+   const post = posts.find(p => p.id == Number(postId));
    if (!post) return <NotFound />;
 
    if (commentsLoading) return <div>Loading comments...</div>;
@@ -47,12 +52,25 @@ export default function PostPage() {
 
    return (
       <div>
-         <h1>{post.title}</h1>
-         <p>{post.description}</p>
+         <Card sx={{ mb: 3 }}>
+            <CardHeader
+               title={<Typography variant="h4">#{post.id} | {post.title}</Typography>}
+               subheader={
+                  <Typography variant="body2" color="text.secondary">
+                     <strong>{post.postedBy.username}</strong> | {formatDate(post.postedOn)}
+                  </Typography>
+               }
+            />
+            <CardContent>
+               <Typography variant="body1" color="text.primary" sx={{ mb: 2 }}>
+                  {post.description}
+               </Typography>
+               <GenericVoteDisplay thing={post} isUserAuthenticated={!useUserError} topic={topic} forWhat="post" />
+            </CardContent>
+         </Card>
 
-         <h2>Comments</h2>
          {comments.length === 0 ? (
-            <p>No comments yet.</p>
+            <Typography>No comments yet.</Typography>
          ) : (
             <ul>
                {comments.map(comment => (
@@ -66,6 +84,8 @@ export default function PostPage() {
                ))}
             </ul>
          )}
+
+         <MakeNew postId={post.id} />
       </div>
    );
 }

@@ -8,7 +8,7 @@ import (
 )
 
 type DeletePostRequest struct {
-	PostID string `json:"postId"`
+	PostID int `json:"postId"`
 }
 
 func DeletePost(pool *pgxpool.Pool) gin.HandlerFunc {

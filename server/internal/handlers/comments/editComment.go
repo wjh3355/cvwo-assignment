@@ -8,7 +8,7 @@ import (
 )
 
 type EditCommentRequest struct {
-	CommentID  string `json:"commentId"`
+	CommentID  int `json:"commentId"`
 	NewContent string `json:"newContent"`
 }
 

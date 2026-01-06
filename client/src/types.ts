@@ -22,7 +22,7 @@ export type Topic =
 	| "photography";
 
 export type Post = {
-	id: string; // unique identifier
+	id: number; // unique identifier
 	topic: Topic;
 	postedBy: User;
 	postedOn: string;
@@ -34,7 +34,7 @@ export type Post = {
 };
 
 export type Comment = {
-	id: string; // unique identifier
+	id: number; // unique identifier
 	postId: string; // associated post identifier
 	commentedBy: User;
 	commentedOn: string;

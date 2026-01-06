@@ -8,7 +8,7 @@ import (
 )
 
 type DeleteCommentRequest struct {
-	CommentID string `json:"commentId"`
+	CommentID int `json:"commentId"`
 }
 
 func DeleteComment(pool *pgxpool.Pool) gin.HandlerFunc {

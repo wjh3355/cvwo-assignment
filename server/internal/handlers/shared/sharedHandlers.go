@@ -18,12 +18,14 @@ func GenericDBHandler[T any](
 	return func(c *gin.Context) {
 		var req T
 		if err := c.ShouldBindJSON(&req); err != nil {
+			fmt.Println("Error with request body:", err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
 		u, exists := c.Get("user")
 		if !exists {
+			fmt.Println("User not found in context")
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			return
 		}

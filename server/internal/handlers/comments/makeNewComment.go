@@ -8,7 +8,7 @@ import (
 )
 
 type NewCommentRequest struct {
-	PostID  string `json:"postId"`
+	PostID  int `json:"postId"`
 	Content string `json:"content"`
 }
 
