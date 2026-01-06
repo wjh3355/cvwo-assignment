@@ -1,16 +1,18 @@
 package main
 
 import (
+	"context"
+	"net/http"
 	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 
 	"log"
 	"time"
 
-	"server/internal/db"
 	"server/internal/handlers/auth"
 	"server/internal/handlers/comments"
 	"server/internal/handlers/posts"
@@ -24,7 +26,13 @@ func main() {
 	godotenv.Load()
 
 	// initialize database connection pool
-	pool, err := db.NewPostgresPool()
+	dbUrl := os.Getenv("DATABASE_URL")
+	if dbUrl == "" {
+		log.Fatal("JWT_SECRET environment variable is not set")
+	}
+	pgConfig, _ := pgxpool.ParseConfig(dbUrl)
+	pgConfig.MaxConns = 20
+	pool, err := pgxpool.NewWithConfig(context.Background(), pgConfig)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,11 +69,15 @@ func main() {
 	// Trusting localhost
 	router.SetTrustedProxies([]string{"127.0.0.1"})
 
+	// Middleware to ensure no requests take longer than 3 seconds,
+	// which will leave server and client hanging
+	router.Use(middleware.TimeOutMiddleware(3))
+
 	// sanity check endpoint
 	router.GET(
 		"/health",
 		func(c *gin.Context) {
-			c.JSON(200, gin.H{"status": "ok"})
+			c.JSON(http.StatusOK, gin.H{"health": "alive and kicking"})
 		},
 	)
 
