@@ -79,7 +79,7 @@ export default function TopicPage() {
                ))}
             </ul>
          )}
-         <MakeNewPost topic={topic}/>
+         <MakeNewPost topic={topic} />
       </div>
    )
 }
