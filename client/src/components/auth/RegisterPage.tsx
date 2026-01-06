@@ -72,7 +72,6 @@ export default function Register() {
             <TextField
                variant="standard"
                {...register("password")}
-               type="password"
                onBlur={() => trigger("password")}
             />
             <span>{errors.password?.message}</span>
@@ -83,7 +82,6 @@ export default function Register() {
             <TextField
                variant="standard"
                {...register("confirmPassword")}
-               type="password"
                onBlur={() => trigger("confirmPassword")}
             />
             <span>{errors.confirmPassword?.message}</span>

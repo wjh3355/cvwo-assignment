@@ -9,6 +9,7 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import useUser from "../../hooks/useUser"
 import GenericVoteDisplay from "../voting/GenericVoteDisplay"
+import MakeNewPost from "../new/MakeNewPost"
 
 export default function TopicPage() {
    const { topic } = useParams()
@@ -78,6 +79,7 @@ export default function TopicPage() {
                ))}
             </ul>
          )}
+         <MakeNewPost topic={topic}/>
       </div>
    )
 }

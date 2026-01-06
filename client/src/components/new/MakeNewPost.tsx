@@ -7,6 +7,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { api } from "../../config"
 import TextField from "@mui/material/TextField"
 import toast from "react-hot-toast"
+import Typography from "@mui/material/Typography"
 
 interface NewPostForm {
    title: string
@@ -16,7 +17,7 @@ interface NewPostForm {
 interface NewPostData extends NewPostForm {
    topic: Topic
 }
-export default function MakeNewComment({ topic }: { topic: Topic }) {
+export default function MakeNewPost({ topic }: { topic: Topic }) {
    const {
       register,
       handleSubmit,
@@ -52,19 +53,25 @@ export default function MakeNewComment({ topic }: { topic: Topic }) {
 
          reset()
 
-         toast.success("Comment created successfully")
+         toast.success("Post created successfully")
       } catch (error) {
-         toast.error("Failed to create comment. Please try again.")
+         toast.error("Failed to create post. Please try again.")
          console.log(error)
       }
    }
 
    return (
       <div>
+         <Typography variant="h5">Make new post for this topic:</Typography>
+         <TextField
+            {...register("title")}
+            onBlur={() => trigger("title")}
+            variant="standard"
+         />
+         <p>{errors.title?.message}</p>
          <TextField
             {...register("description")}
             onBlur={() => trigger("description")}
-            label="Comment"
             multiline
             rows={4}
          />
@@ -73,7 +80,7 @@ export default function MakeNewComment({ topic }: { topic: Topic }) {
             disabled={!isDirty || !isValid || isSubmitting}
             onClick={handleSubmit(handleCreateComment)}
          >
-            {isSubmitting ? "Submitting..." : "Submit Comment"}
+            {isSubmitting ? "Submitting..." : "Submit Post"}
          </Button>
       </div>
    )
