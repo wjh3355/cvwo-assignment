@@ -8,8 +8,8 @@ import (
 )
 
 type EditCommentRequest struct {
-	CommentID		string `json:"commentId"`
-	NewContent       string `json:"newContent"`
+	CommentID  string `json:"commentId"`
+	NewContent string `json:"newContent"`
 }
 
 func EditComment(pool *pgxpool.Pool) gin.HandlerFunc {

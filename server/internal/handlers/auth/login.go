@@ -38,7 +38,7 @@ func Login(pool *pgxpool.Pool, jwtSecret []byte) gin.HandlerFunc {
 			return
 		}
 
-		user, err := utils.Authenticate(pool, req.Username, req.Password)
+		user, err := utils.Authenticate(pool, req.Username, req.Password, c)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 			c.Abort()

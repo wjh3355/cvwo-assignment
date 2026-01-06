@@ -10,8 +10,8 @@ import (
 )
 
 func GenericDBHandler[T any](
-	pool *pgxpool.Pool, 
-	pgquery string, 
+	pool *pgxpool.Pool,
+	pgquery string,
 	getArgs func(req T, userID int) []any,
 	operation string,
 ) gin.HandlerFunc {
@@ -29,13 +29,12 @@ func GenericDBHandler[T any](
 		}
 		user := u.(models.User)
 
-
 		if _, err := pool.Exec(c, pgquery, getArgs(req, user.ID)...); err != nil {
 			fmt.Println("Database error:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("%s operation for user %s (ID %d) failed", operation, user.Username, user.ID)})
 			return
 		}
-		
+
 		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("%s operation for user %s (ID %d) was successful", operation, user.Username, user.ID)})
 	}
 }

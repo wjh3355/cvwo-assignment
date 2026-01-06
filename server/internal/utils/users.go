@@ -3,19 +3,15 @@ package utils
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"server/internal/models"
 )
 
-func Authenticate(pool *pgxpool.Pool, username string, password string) (models.User, error) {
+func Authenticate(pool *pgxpool.Pool, username string, password string, ctx context.Context) (models.User, error) {
 
 	fmt.Println("Authenticating user:", username)
-
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
 
 	var user models.User
 

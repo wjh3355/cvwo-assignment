@@ -8,7 +8,7 @@ import (
 )
 
 type EditPostRequest struct {
-	PostID				string `json:"postId"`
+	PostID         string `json:"postId"`
 	NewTitle       string `json:"newTitle"`
 	NewDescription string `json:"newDescription"`
 }
