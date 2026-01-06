@@ -43,34 +43,3 @@ func Authenticate(pool *pgxpool.Pool, username string, password string) (models.
 
 	return user, nil
 }
-
-// func CreateUser(pool *pgxpool.Pool) gin.HandlerFunc {
-// 	type request struct {
-// 		Name  string `json:"name" binding:"required"`
-// 		Email string `json:"email" binding:"required,email"`
-// 	}
-
-// 	return func(c *gin.Context) {
-// 		var req request
-// 		if err := c.ShouldBindJSON(&req); err != nil {
-// 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 			return
-// 		}
-
-// 		ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second)
-// 		defer cancel()
-
-// 		_, err := pool.Exec(
-// 			ctx,
-// 			"INSERT INTO users (name, email) VALUES ($1, $2)",
-// 			req.Name,
-// 			req.Email,
-// 		)
-// 		if err != nil {
-// 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 			return
-// 		}
-
-// 		c.Status(http.StatusCreated)
-// 	}
-// }

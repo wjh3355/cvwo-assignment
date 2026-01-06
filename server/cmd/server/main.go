@@ -98,6 +98,16 @@ func main() {
 	// get posts of specific topic endpoint
 	soft.GET("/posts/:topic", posts.GetPostsOfTopic(pool))
 
+	// create post endpoint (REQUIRES AUTH)
+	hard.POST("/posts", posts.MakeNewPost(pool))
+
+	// edit post endpoint (REQUIRES AUTH)
+	hard.PATCH("/posts", posts.EditPost(pool))
+
+	// (soft) delete post endpoint (REQUIRES AUTH)
+	hard.DELETE("/posts", posts.DeletePost(pool))
+	// deleted posts are reassigned to a [deleted] user with id = -999
+
 	/////////////////////////////////////
 	// COMMENTS ENDPOINTS
 	/////////////////////////////////////
@@ -105,14 +115,22 @@ func main() {
 	// get comments of specific post endpoint
 	soft.GET("/comments/:postId", comments.GetCommentsofPost(pool))
 
+	// create comment endpoint (REQUIRES AUTH)
+	hard.POST("/comments", comments.MakeNewComment(pool))
+
+	// edit comment endpoint (REQUIRES AUTH)
+	hard.PATCH("/comments", comments.EditComment(pool))
+
+	// delete comment endpoint (REQUIRES AUTH)
+	hard.DELETE("/comments", comments.DeleteComment(pool))
+	// comments are actually removed from the db
+
 	/////////////////////////////////////
 	// VOTING ENDPOINTS
 	/////////////////////////////////////
 
 	// vote on post or comment endpoint (REQUIRES AUTH)
 	hard.POST("/vote", voting.VoteOnPostOrComment(pool))
-
-	// TODO: add POST, PATCH, DELETE endpoints for posts and comments
 
 	// run the server at port 8080
 	router.Run(":8080")
