@@ -1,2 +1,2 @@
 npx prettier ./client/ --write
-(cd server/ && go fmt ./...)
+(cd server/ && goimports -w .)
