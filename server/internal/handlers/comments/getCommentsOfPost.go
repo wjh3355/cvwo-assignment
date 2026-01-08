@@ -14,14 +14,17 @@ func GetCommentsofPost(pool *pgxpool.Pool) gin.HandlerFunc {
 
 		postId := c.Param("postId")
 
-		var currUserIfAny models.User
+		var userId *int
 		isAuthenticated, exists := c.Get("isAuthenticated")
 		if exists && isAuthenticated.(bool) {
 			userVal, userExists := c.Get("user")
 			if userExists {
-				currUserIfAny = userVal.(models.User)
+				user := userVal.(models.User)
+				userId = &user.ID
 			}
 		}
+		// if a user is authenticated, userId points to a int
+		// if not, it is nil
 
 		rows, err := pool.Query(
 			c.Request.Context(),
@@ -41,7 +44,7 @@ func GetCommentsofPost(pool *pgxpool.Pool) gin.HandlerFunc {
 			WHERE c.post_id=$1 
 			ORDER BY c.commented_on DESC`,
 			postId,
-			currUserIfAny.ID,
+			userId,
 		)
 		if err != nil {
 			fmt.Println("Error querying comments by post ID:", err)

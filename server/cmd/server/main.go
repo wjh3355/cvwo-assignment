@@ -28,9 +28,12 @@ func main() {
 	// initialize database connection pool
 	dbUrl := os.Getenv("DATABASE_URL")
 	if dbUrl == "" {
-		log.Fatal("JWT_SECRET environment variable is not set")
+		log.Fatal("DATABASE_URL environment variable is not set")
 	}
-	pgConfig, _ := pgxpool.ParseConfig(dbUrl)
+	pgConfig, err := pgxpool.ParseConfig(dbUrl)
+	if err != nil {
+		log.Fatal("Error when creating PostgreSQL pool: ", err)
+	}
 	pgConfig.MaxConns = 20
 	pool, err := pgxpool.NewWithConfig(context.Background(), pgConfig)
 	if err != nil {
@@ -73,8 +76,10 @@ func main() {
 	// which will leave server and client hanging
 	router.Use(middleware.TimeOutMiddleware(3))
 
+	api := router.Group("/api")
+
 	// sanity check endpoint
-	router.GET(
+	api.GET(
 		"/health",
 		func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{"health": "alive and kicking"})
@@ -86,21 +91,21 @@ func main() {
 	/////////////////////////////////////
 
 	// login endpoint
-	router.POST("/login", auth.Login(pool, jwtSecret))
+	api.POST("/login", auth.Login(pool, jwtSecret))
 
 	// check auth endpoint
-	router.GET("/check-auth", auth.CheckAuth(jwtSecret))
+	api.GET("/check-auth", auth.CheckAuth(jwtSecret))
 
 	// logout endpoint
-	router.POST("/logout", auth.Logout())
+	api.POST("/logout", auth.Logout())
 
 	// register endpoint
-	router.POST("/register", auth.Register(pool, jwtSecret))
+	api.POST("/register", auth.Register(pool, jwtSecret))
 
-	soft := router.Group("/")
+	soft := api.Group("/")
 	soft.Use(middleware.SoftAuthMiddleware(jwtSecret))
 
-	hard := router.Group("/")
+	hard := api.Group("/")
 	hard.Use(middleware.HardAuthMiddleware(jwtSecret))
 
 	/////////////////////////////////////

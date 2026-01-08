@@ -25,21 +25,24 @@ func GetPostsOfTopic(pool *pgxpool.Pool) gin.HandlerFunc {
 			return
 		}
 
-		var currUserIfAny models.User
+		var userId *int
 		isAuthenticated, exists := c.Get("isAuthenticated")
 		if exists && isAuthenticated.(bool) {
 			userVal, userExists := c.Get("user")
 			if userExists {
-				currUserIfAny = userVal.(models.User)
+				user := userVal.(models.User)
+				userId = &user.ID
 			}
 		}
+		// if a user is authenticated, userId points to a int
+		// if not, it is nil
 
 		rows, err := pool.Query(
 			c.Request.Context(),
 			`SELECT
 				p.id, p.topic, p.title, p.description, p.posted_on AT TIME ZONE 'Asia/Singapore' as posted_on,
 				u.id, u.username,
-				(SELECT COUNT(*) FROM comments WHERE post_id = p.id) AS comment_count,
+				COUNT(DISTINCT c.id) AS comment_count,
 				(SELECT COALESCE(SUM(vote_type), 0) FROM post_votes pv WHERE pv.post_id = p.id) AS vote_score,
 				(
 					SELECT COALESCE(
@@ -48,12 +51,15 @@ func GetPostsOfTopic(pool *pgxpool.Pool) gin.HandlerFunc {
 					)
 				) AS user_vote
 			FROM posts p
-			INNER JOIN users u
-				ON p.posted_by = u.id 
-			WHERE p.topic=$1 
+			JOIN users u
+				ON p.posted_by = u.id
+			LEFT JOIN comments c
+				ON c.post_id = p.id
+			WHERE p.topic = $1
+			GROUP BY p.id, p.topic, p.title, p.description, p.posted_on, u.id, u.username
 			ORDER BY p.posted_on DESC`,
 			topic,
-			currUserIfAny.ID,
+			userId,
 		)
 		if err != nil {
 			fmt.Println("Error querying posts by topic:", err)
