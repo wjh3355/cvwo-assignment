@@ -14,6 +14,7 @@ interface VoteDisplayProps<T extends Post | Comment> {
    topic?: Topic
    postId?: string
    forWhat: "post" | "comment"
+   isADeletedPost?: boolean
 }
 
 export default function GenericVoteDisplay<T extends Post | Comment>({
@@ -22,6 +23,7 @@ export default function GenericVoteDisplay<T extends Post | Comment>({
    topic,
    postId,
    forWhat,
+   isADeletedPost,
 }: VoteDisplayProps<T>) {
    const { userVote, voteScore, id } = thing
 
@@ -78,7 +80,7 @@ export default function GenericVoteDisplay<T extends Post | Comment>({
          <IconButton
             size="small"
             onClick={() => (userVote === 1 ? handleVote(0) : handleVote(1))}
-            disabled={!isUserAuthenticated || mut.isPending}
+            disabled={isADeletedPost || !isUserAuthenticated || mut.isPending}
             sx={{
                color: userVote === 1 ? "orange" : "inherit",
                "&:hover": { color: "orange" },
@@ -105,7 +107,7 @@ export default function GenericVoteDisplay<T extends Post | Comment>({
          <IconButton
             size="small"
             onClick={() => (userVote === -1 ? handleVote(0) : handleVote(-1))}
-            disabled={!isUserAuthenticated || mut.isPending}
+            disabled={isADeletedPost || !isUserAuthenticated || mut.isPending}
             sx={{
                color: userVote === -1 ? "blue" : "inherit",
                "&:hover": { color: "blue" },

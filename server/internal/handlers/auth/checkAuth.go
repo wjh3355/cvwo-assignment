@@ -41,7 +41,7 @@ func CheckAuth(jwtSecret []byte) gin.HandlerFunc {
 		fmt.Println("User auth checked", (*claims).Username)
 
 		c.JSON(http.StatusOK, gin.H{
-			"user_id":  (*claims).UserID,
+			"id":       (*claims).UserID,
 			"username": (*claims).Username,
 		})
 	}

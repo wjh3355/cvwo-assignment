@@ -1,5 +1,5 @@
 export type User = {
-   id: string // unique identifier
+   id: number // unique identifier
    username: string
 }
 

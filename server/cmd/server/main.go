@@ -61,11 +61,12 @@ func main() {
 	router := gin.Default()
 
 	// CORS configuration
+	// allow requests from all localhost origins
 	router.Use(cors.New(cors.Config{
 		AllowOriginFunc: func(origin string) bool {
 			return strings.HasPrefix(origin, "http://localhost:") || strings.HasPrefix(origin, "http://127.0.0.1:")
 		},
-		AllowMethods:     []string{"GET", "POST", "DELETE", "PATCH"},
+		AllowMethods:     []string{"GET", "POST", "DELETE", "PATCH", "OPTIONS", "PUT"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,

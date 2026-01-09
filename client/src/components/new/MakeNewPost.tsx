@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import type { Topic } from "../../types"
+import type { Topic, User } from "../../types"
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js"
 import { z } from "zod"
 import Button from "@mui/material/Button"
@@ -17,7 +17,13 @@ interface NewPostForm {
 interface NewPostData extends NewPostForm {
    topic: Topic
 }
-export default function MakeNewPost({ topic }: { topic: Topic }) {
+export default function MakeNewPost({
+   topic,
+   user,
+}: {
+   topic: Topic
+   user: User | undefined
+}) {
    const {
       register,
       handleSubmit,
@@ -37,6 +43,10 @@ export default function MakeNewPost({ topic }: { topic: Topic }) {
    })
 
    const qc = useQueryClient()
+
+   if (!user) {
+      return <Typography>Please log in to create a post.</Typography>
+   }
 
    const queryKey = ["posts", topic]
 

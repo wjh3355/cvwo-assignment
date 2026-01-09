@@ -1,15 +1,11 @@
 import { useParams, useNavigate } from "react-router"
 import { useFetch } from "../../hooks/useFetch"
 import type { Post } from "../../types"
-import { formatDate, isValidTopic } from "../../utils"
+import { isValidTopic } from "../../utils"
 import NotFound from "../NotFound"
-import Card from "@mui/material/Card"
-import CardContent from "@mui/material/CardContent"
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
 import useUser from "../../hooks/useUser"
-import GenericVoteDisplay from "../voting/GenericVoteDisplay"
 import MakeNewPost from "../new/MakeNewPost"
+import TopicPostElement from "./TopicPostElement"
 
 export default function TopicPage() {
    const { topic } = useParams()
@@ -24,7 +20,7 @@ export default function TopicPage() {
       enabled: isValidTopic(topic),
    })
 
-   const { isError: useUserError } = useUser()
+   const { isError: useUserError, data: thisUser } = useUser()
 
    if (!isValidTopic(topic)) {
       return <NotFound />
@@ -39,47 +35,18 @@ export default function TopicPage() {
          {posts && posts.length > 0 && (
             <ul>
                {posts.map((post) => (
-                  <li
+                  <TopicPostElement
                      key={post.id}
-                     className="hover:cursor-pointer"
-                     onClick={() => nav(`/${topic}/${post.id}`)}
-                  >
-                     <Card>
-                        <CardContent>
-                           <Box>
-                              <Typography
-                                 variant="caption"
-                                 color="text.secondary"
-                              >
-                                 #{post.id} | Posted by{" "}
-                                 <strong>{post.postedBy.username}</strong> |{" "}
-                                 {formatDate(post.postedOn)} |{" "}
-                                 {post.commentCount} comments
-                              </Typography>
-                           </Box>
-                           <Typography variant="h5">{post.title}</Typography>
-                           <Typography
-                              variant="body2"
-                              color="text.secondary"
-                              noWrap
-                           >
-                              {post.description}
-                           </Typography>
-                           <div onClick={(e) => e.stopPropagation()}>
-                              <GenericVoteDisplay
-                                 thing={post}
-                                 isUserAuthenticated={!useUserError}
-                                 topic={topic}
-                                 forWhat="post"
-                              />
-                           </div>
-                        </CardContent>
-                     </Card>
-                  </li>
+                     post={post}
+                     topic={topic}
+                     nav={nav}
+                     currUser={thisUser}
+                     useUserError={useUserError}
+                  />
                ))}
             </ul>
          )}
-         <MakeNewPost topic={topic} />
+         <MakeNewPost topic={topic} user={thisUser} />
       </div>
    )
 }
