@@ -103,14 +103,14 @@ export default function TopicPostElement({
                   </div>
                )}
                <Box>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant="caption" color="textSecondary">
                      #{post.id} | Posted by{" "}
                      <strong>{post.postedBy.username}</strong> |{" "}
                      {formatDate(post.postedOn)} | {post.commentCount} comments
                   </Typography>
                </Box>
                <Typography variant="h5">{post.title}</Typography>
-               <Typography variant="body2" color="text.secondary" noWrap>
+               <Typography variant="body2" color="textSecondary" noWrap>
                   {post.description}
                </Typography>
                <div onClick={(e) => e.stopPropagation()}>

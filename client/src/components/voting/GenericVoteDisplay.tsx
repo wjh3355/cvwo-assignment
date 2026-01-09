@@ -71,34 +71,24 @@ export default function GenericVoteDisplay<T extends Post | Comment>({
    }
 
    return (
-      <Stack
-         direction="row"
-         alignItems="center"
-         spacing={0.5}
-         sx={{ width: 40 }}
-      >
+      <Stack direction="row" alignItems="center" spacing={0.5}>
          <IconButton
             size="small"
             onClick={() => (userVote === 1 ? handleVote(0) : handleVote(1))}
             disabled={isADeletedPost || !isUserAuthenticated || mut.isPending}
             sx={{
-               color: userVote === 1 ? "orange" : "inherit",
+               color: userVote === 1 ? "orange" : "gray",
                "&:hover": { color: "orange" },
             }}
          >
-            <ArrowUpwardRoundedIcon fontSize="medium" />
+            <ArrowUpwardRoundedIcon />
          </IconButton>
 
          <Typography
-            variant="body2"
             fontWeight="bold"
             sx={{
                color:
-                  userVote === 1
-                     ? "orange"
-                     : userVote === -1
-                       ? "blue"
-                       : "inherit",
+                  userVote === 1 ? "orange" : userVote === -1 ? "blue" : "gray",
             }}
          >
             {voteScore}
@@ -109,11 +99,11 @@ export default function GenericVoteDisplay<T extends Post | Comment>({
             onClick={() => (userVote === -1 ? handleVote(0) : handleVote(-1))}
             disabled={isADeletedPost || !isUserAuthenticated || mut.isPending}
             sx={{
-               color: userVote === -1 ? "blue" : "inherit",
+               color: userVote === -1 ? "blue" : "gray",
                "&:hover": { color: "blue" },
             }}
          >
-            <ArrowDownwardRoundedIcon fontSize="medium" />
+            <ArrowDownwardRoundedIcon />
          </IconButton>
       </Stack>
    )

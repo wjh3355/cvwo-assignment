@@ -55,14 +55,14 @@ export default function PostPage() {
                   </Typography>
                }
                subheader={
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="textSecondary">
                      <strong>{post.postedBy.username}</strong> |{" "}
                      {formatDate(post.postedOn)}
                   </Typography>
                }
             />
             <CardContent>
-               <Typography variant="body1" color="text.primary" sx={{ mb: 2 }}>
+               <Typography variant="body1" color="primary" sx={{ mb: 2 }}>
                   {post.description}
                </Typography>
                <GenericVoteDisplay
