@@ -1,25 +1,26 @@
-This repo contains the source code for **TalkSpace**, a web forum inspired by Reddit that allows users to post content, comment, and vote on submissions (posts and comments). Each post must adhere to a certain topic (Technology, art, science...). In an effort to make the content accessible to all, TalkSpace does not require users to create an account or log in to view posts and comments. However, one does need an account to create posts, comment, and vote.
+# TalkSpace
+
+This repo contains the source code for **TalkSpace**, a web forum inspired by [Reddit](https://www.reddit.com/) that allows users to post content, comment, and vote on submissions (posts and comments). Each post must adhere to a certain topic (Technology, art, science...). In an effort to make the content accessible to all, TalkSpace does not require users to create an account or log in to view posts and comments. However, one does need an account to create posts, comment, and vote.
 
 ## Code Structure
 
 This is a monorepo containing the client code in the `client/` directory and the server code in the `server/` directory.
 
-### Client
+## Client
 
-The client-facing website is built using React (with Vite) and TypeScript (port 5173 for dev / 4173 for production). It handles the user interface, enabling users to interact with the forum, create posts, comment, and vote etc. Major libraries/technologies used include:
+The client-facing website is built using [React](https://react.dev/) (with [Vite](https://vite.dev/)) and TypeScript (port 5173 for dev / 4173 for production). It handles the user interface, enabling users to interact with the forum, create posts, comment, and vote etc. Major libraries/technologies used include:
 
-- React Router for routing and navigation
-- Axios for making HTTP requests to backend
-- TanStack Query for data fetching and state management
-- Tailwind CSS for easy styling
-- Material UI (MUI) for premade UI components
-- React Hook Form for form handling (login, signup, post/comment creation/editing)
-
+- [React Router](https://reactrouter.com/) for routing and navigation
+- [Axios](https://axios-http.com/) for making HTTP requests to backend
+- [TanStack Query](https://tanstack.com/query/latest) for data fetching and state management
+- [Tailwind CSS](https://tailwindcss.com/) for easy styling
+- [Material UI (MUI)](https://mui.com/) for premade UI components
+- [React Hook Form](https://react-hook-form.com/) for form handling (login, signup, post/comment creation/editing)
 It communicates with the server via RESTful API endpoints.
 
-#### File Structure
+### File Structure
 
-```
+```text
 client/
 ├── public/                 # Static assets (Unused)
 ├── src/
@@ -41,7 +42,7 @@ client/
 └── other config files (vite config, TS config, ESLint config...)
 ```
 
-#### Routes
+### Routes
 
 - `/` - Home page displaying a list of topics
 - `/:topic` - Displays all posts under the specified topic (+ create new post form, if logged in)
@@ -49,9 +50,9 @@ client/
 - `/auth` - Login page
 - `/auth/register` - Registration page
 
-### Server
+## Server
 
-The backend server is a Gin (Golang) application (port 8080). Every endpoint starts with `/api`. It handles user authentication, post and comment CRUD functions, and voting functionality. It exposes RESTful API endpoints requested by the client.
+The backend server is a [Gin](https://gin-gonic.com/en/) (Golang) application (port 8080). Every endpoint starts with `/api`. It handles user authentication, post and comment CRUD functions, and voting functionality. It exposes RESTful API endpoints requested by the client.
 
 ### Authentication
 
@@ -73,3 +74,98 @@ The backend utilises 3 different middleware functions:
 - `middleware.HardAuthMiddleware()` - Same as SoftAuthMiddleware, but if the JWT cookie is not present or invalid, it **aborts the request** and returns a 401 (unauthorized) status code.
 
 The purpose of having two different authentication middleware functions is to enable both protected and unprotected routes. For example, creating/editing/deleting a post/comment or voting (downvote/upvote) requires the user to be authenticated (HardAuthMiddleware), whereas simply viewing posts/comments does not (SoftAuthMiddleware). However, if the user is authenticated, we still want their identity so we can display the appropriate UI (show edit/delete buttons for their own posts/comments, and also highlight their vote direction). This matches Reddit's functionality (one does not need an account to view information, but having an account enhances their experience).
+
+### Other Endpoints
+
+- `GET /api/posts/:topic` - Retrieves all posts under the specified topic, including the number of comments, votes (num of upvotes - num of downvotes), and the user's vote (if authenticated) for each post. Uses soft authentication.
+- `POST /api/posts` - Creates a new post. Requires hard authentication.
+- `PATCH /api/posts` - Edits an existing post. Requires hard authentication.
+- `DELETE /api/posts` - Deletes an existing post. Requires hard authentication.
+- `GET /api/comments/:postId` - Retrieves all comments under the specified post, including the number of votes (num of upvotes - num of downvotes), and the user's vote (if authenticated) for each comment. Uses soft authentication.
+- `POST /api/comments` - Creates a new comment. Requires hard authentication.
+- `PATCH /api/comments` - Edits an existing comment. Requires hard authentication.
+- `DELETE /api/comments` - Deletes an existing comment. Requires hard authentication.
+- `POST /api/vote` - Casts/updates/removes a vote (upvote/downvote) on a post or comment. Requires hard authentication.
+
+## Database
+
+The project uses a local [PostgreSQL](https://www.postgresql.org/) relational database to store user, post, comment and vote data. The database schema is as follows. If the diagram is not rendering, make sure your markdown viewer supports [Mermaid](https://mermaid.js.org/) diagrams.
+
+```mermaid
+erDiagram
+   USERS {
+      int id PK
+      string username
+      string password_hash
+      timestamp created_at
+   }
+
+   POSTS {
+      int id PK
+      topic_name topic
+      int posted_by FK
+      string title
+      string description
+      timestamp posted_on
+   }
+
+   POST_VOTES {
+      int post_id FK
+      int user_id FK
+      int vote_value
+   }
+
+   COMMENTS {
+      int id PK
+      int post_id FK
+      int commented_by FK
+      string content
+      timestamp commented_on
+   }
+
+   COMMENT_VOTES {
+      int comment_id FK
+      int user_id FK
+      int vote_value
+   }
+
+   USERS ||--o{ POSTS : creates
+   USERS ||--o{ COMMENTS : writes
+
+   POSTS ||--o{ COMMENTS : has
+   POSTS ||--o{ POST_VOTES : receives
+
+   USERS ||--o{ POST_VOTES : casts
+   USERS ||--o{ COMMENT_VOTES : casts
+
+   COMMENTS ||--o{ COMMENT_VOTES : receives
+```
+
+## Future Improvements
+
+This project is still largely a work in progress and many features (especially UI/UX) have not been fully polished. Potential future improvements include:
+
+- Containerisation using Docker (most important)
+- Search bar to search for posts and comments by keywords
+- User profiles to view a particular user's posts and comments
+- Ability to comment on comments (nested comments, like in reddit)
+- Dark mode and mobile responsiveness
+
+## AI Declaration
+
+I hereby declare that ChatGPT and Gemini were used in the project in the following ways:
+
+- What the most common MUI components are and how to use them (Container, Box, Button, Card, etc)
+- How generic types work in TypeScript (used in useFetch)
+- How generic function components work (used in GenericVoteDisplay)
+
+- Learn how JWT-based authentication works and why HTTP-Only cookies are preferred for storing them
+- Learn how to implement middleware and routes in Gin
+- Learn how structs, struct tags and pointers work in Go
+- Learn how generic types work in Go
+- Learn what CORS is
+
+- How to set up a local PostgreSQL database in Ubuntu
+- Learn why using separate vote tables is more efficient than storing vote counts (and who casted them) in the posts/comments tables
+- How subqueries work in SQL
+- The order of keywords in SQL statements (WHERE, JOIN, GROUP BY, ORDER BY...) and special clauses like ON CONFLICT, CASE WHEN etc
