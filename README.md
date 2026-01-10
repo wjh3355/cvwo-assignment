@@ -143,13 +143,14 @@ erDiagram
 
 ## Future Improvements
 
-This project is still largely a work in progress and many features (especially UI/UX) have not been fully polished. Potential future improvements include:
+This project is still largely a work in progress and many features (especially UI/UX) have not been fully polished. Potential future improvements (from most to least important) include:
 
-- Containerisation using Docker (most important)
+- Edit posts and comments
+- Containerisation using Docker and then deployment
+- UI touch ups, Dark mode and mobile responsiveness
 - Search bar to search for posts and comments by keywords
 - User profiles to view a particular user's posts and comments
 - Ability to comment on comments (nested comments, like in reddit)
-- Dark mode and mobile responsiveness
 
 ## AI Declaration
 
@@ -169,3 +170,7 @@ I hereby declare that ChatGPT and Gemini were used in the project in the followi
 - Learn why using separate vote tables is more efficient than storing vote counts (and who casted them) in the posts/comments tables
 - How subqueries work in SQL
 - The order of keywords in SQL statements (WHERE, JOIN, GROUP BY, ORDER BY...) and special clauses like ON CONFLICT, CASE WHEN etc
+
+- How Mermaid syntax works in markdown
+
+Last updated: 10/1/2025
