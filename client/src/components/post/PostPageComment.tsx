@@ -1,34 +1,31 @@
-import Card from "@mui/material/Card"
-import CardContent from "@mui/material/CardContent"
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
-import { type NavigateFunction } from "react-router"
+import { useState, type MouseEvent } from "react"
+import type { Comment, User } from "../../types"
 import { formatDate } from "../../utils"
 import GenericVoteDisplay from "../voting/GenericVoteDisplay"
-import type { Post, Topic, User } from "../../types"
+import { useQueryClient } from "@tanstack/react-query"
+import Card from "@mui/material/Card"
+import CardContent from "@mui/material/CardContent"
+import Typography from "@mui/material/Typography"
 import IconButton from "@mui/material/IconButton"
-import MenuIcon from "@mui/icons-material/Menu"
-import { useState, type MouseEvent } from "react"
-import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import Dialog from "@mui/material/Dialog"
 import ButtonGroup from "@mui/material/ButtonGroup"
 import Button from "@mui/material/Button"
-import { useQueryClient } from "@tanstack/react-query"
+import MenuIcon from "@mui/icons-material/Menu"
+import Menu from "@mui/material/Menu"
+import Box from "@mui/material/Box"
 import { genericHTTPRequestHandler } from "../../config"
 
 interface TopicPostElementProps {
-   post: Post
-   topic: Topic
-   nav: NavigateFunction
+   comment: Comment
+   postId: string
    currUser: User | undefined
    useUserError: boolean
 }
 
-export default function TopicPostElement({
-   post,
-   topic,
-   nav,
+export default function PostPageComment({
+   comment,
+   postId,
    currUser,
    useUserError,
 }: TopicPostElementProps) {
@@ -45,13 +42,10 @@ export default function TopicPostElement({
    const qc = useQueryClient()
 
    return (
-      <li
-         className="hover:cursor-pointer my-3"
-         onClick={() => nav(`/${topic}/${post.id}`)}
-      >
+      <li className="my-3">
          <Card>
             <CardContent className="relative">
-               {post.postedBy.id === currUser?.id && (
+               {comment.commentedBy.id === currUser?.id && (
                   <div
                      onClick={(e) => e.stopPropagation()}
                      className="absolute top-3 right-3"
@@ -75,7 +69,7 @@ export default function TopicPostElement({
                      >
                         <Box p={2}>
                            <Typography>
-                              Do you really want to delete this post?{" "}
+                              Do you really want to delete this comment?{" "}
                               <strong>This action cannot be undone.</strong>
                            </Typography>
                            <ButtonGroup>
@@ -86,12 +80,12 @@ export default function TopicPostElement({
                                  color="error"
                                  onClick={async () => {
                                     await genericHTTPRequestHandler(
-                                       "/posts",
+                                       "/comments",
                                        "delete",
-                                       { postId: post.id },
-                                       ["posts", topic],
+                                       { commentId: comment.id },
+                                       ["comments", postId!],
                                        qc,
-                                       "Post deletion"
+                                       "Comment deletion"
                                     )
                                     handleCloseDeleteDialog()
                                  }}
@@ -103,26 +97,19 @@ export default function TopicPostElement({
                      </Dialog>
                   </div>
                )}
-               <Box>
-                  <Typography variant="caption" color="textSecondary">
-                     #{post.id} | Posted by{" "}
-                     <strong>{post.postedBy.username}</strong> |{" "}
-                     {formatDate(post.postedOn)} | {post.commentCount} comments
-                  </Typography>
-               </Box>
-               <Typography variant="h5">{post.title}</Typography>
-               <Typography variant="body2" color="textSecondary" noWrap>
-                  {post.description}
+               <Typography variant="h6">
+                  #{comment.id} | {comment.content}
                </Typography>
-               <div onClick={(e) => e.stopPropagation()}>
-                  <GenericVoteDisplay
-                     thing={post}
-                     isUserAuthenticated={!useUserError}
-                     topic={topic}
-                     forWhat="post"
-                     isADeletedPost={post.postedBy.id === -999}
-                  />
-               </div>
+               <Typography variant="caption" color="textSecondary">
+                  <strong>{comment.commentedBy.username}</strong> |{" "}
+                  {formatDate(comment.commentedOn)}
+               </Typography>
+               <GenericVoteDisplay
+                  thing={comment}
+                  isUserAuthenticated={!useUserError}
+                  postId={postId}
+                  forWhat="comment"
+               />
             </CardContent>
          </Card>
       </li>

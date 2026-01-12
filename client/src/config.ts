@@ -1,5 +1,7 @@
-import axios from "axios"
+import axios, { isAxiosError } from "axios"
 import type { Topic } from "./types"
+import type { QueryClient } from "@tanstack/react-query"
+import toast from "react-hot-toast"
 
 export const TOPICS: readonly Topic[] = [
    "technology",
@@ -27,3 +29,30 @@ export const api = axios.create({
       "Content-Type": "application/json",
    },
 })
+
+export async function genericHTTPRequestHandler(
+   url: string,
+   method: string,
+   data: any,
+   queryKey: string[],
+   qc: QueryClient,
+   operation: string = "Operation"
+) {
+   try {
+      await api({ url, method, data })
+
+      qc.invalidateQueries({ queryKey })
+
+      toast.success(`${operation} successful`)
+   } catch (error) {
+      if (isAxiosError(error)) {
+         if (error.response) {
+            toast.error(`${operation} failed: ${error.response.data.error}.`)
+         } else {
+            toast.error(`${operation} failed: ${error.request}.`)
+         }
+      } else {
+         toast.error("An unknown error occured. Try again later.")
+      }
+   }
+}

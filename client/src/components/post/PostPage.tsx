@@ -10,6 +10,7 @@ import CardHeader from "@mui/material/CardHeader"
 import CardContent from "@mui/material/CardContent"
 import Typography from "@mui/material/Typography"
 import MakeNew from "../new/MakeNewComment"
+import PostPageComment from "./PostPageComment"
 
 export default function PostPage() {
    const { topic, postId } = useParams()
@@ -24,7 +25,7 @@ export default function PostPage() {
       enabled: validTopic,
    })
 
-   const { isError: useUserError } = useUser()
+   const { isError: useUserError, data: currUser } = useUser()
 
    const {
       data: comments,
@@ -62,14 +63,13 @@ export default function PostPage() {
                }
             />
             <CardContent>
-               <Typography variant="body1" color="primary" sx={{ mb: 2 }}>
-                  {post.description}
-               </Typography>
+               <Typography sx={{ mb: 2 }}>{post.description}</Typography>
                <GenericVoteDisplay
                   thing={post}
                   isUserAuthenticated={!useUserError}
                   topic={topic}
                   forWhat="post"
+                  isADeletedPost={post.postedBy.id === -999}
                />
             </CardContent>
          </Card>
@@ -79,21 +79,12 @@ export default function PostPage() {
          ) : (
             <ul>
                {comments.map((comment) => (
-                  <li key={comment.id} className="my-3">
-                     <p>
-                        #{comment.id} | {comment.content}
-                     </p>
-                     <p className="text-sm text-gray-500">
-                        <strong>{comment.commentedBy.username}</strong> |{" "}
-                        {formatDate(comment.commentedOn)}
-                     </p>
-                     <GenericVoteDisplay
-                        thing={comment}
-                        isUserAuthenticated={!useUserError}
-                        postId={postId}
-                        forWhat="comment"
-                     />
-                  </li>
+                  <PostPageComment
+                     comment={comment}
+                     postId={postId!}
+                     currUser={currUser}
+                     useUserError={useUserError}
+                  />
                ))}
             </ul>
          )}
