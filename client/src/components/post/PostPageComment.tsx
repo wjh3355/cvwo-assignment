@@ -15,6 +15,7 @@ import MenuIcon from "@mui/icons-material/Menu"
 import Menu from "@mui/material/Menu"
 import Box from "@mui/material/Box"
 import { genericHTTPRequestHandler } from "../../config"
+import EditComment from "../new/EditComment"
 
 interface TopicPostElementProps {
    comment: Comment
@@ -39,6 +40,10 @@ export default function PostPageComment({
    const handleOpenDeleteDialog = () => setDeleteDialogOpen(true)
    const handleCloseDeleteDialog = () => setDeleteDialogOpen(false)
 
+   const [editDialogOpen, setEditDialogOpen] = useState(false)
+   const handleOpenEditDialog = () => setEditDialogOpen(true)
+   const handleCloseEditDialog = () => setEditDialogOpen(false)
+
    const qc = useQueryClient()
 
    return (
@@ -58,11 +63,30 @@ export default function PostPageComment({
                         open={isMenuOpen}
                         onClose={handleMenuClose}
                      >
-                        <MenuItem>Edit</MenuItem>
+                        <MenuItem onClick={handleOpenEditDialog}>Edit</MenuItem>
                         <MenuItem onClick={handleOpenDeleteDialog}>
                            Delete
                         </MenuItem>
                      </Menu>
+                     <Dialog
+                        open={editDialogOpen}
+                        onClose={handleCloseEditDialog}
+                     >
+                        <Box p={2} sx={{ minWidth: 500 }}>
+                           <Typography>Edit Comment</Typography>
+                           <EditComment
+                              postId={postId}
+                              comment={comment}
+                              cb={() => {
+                                 handleCloseEditDialog()
+                                 handleMenuClose()
+                              }}
+                           />
+                           <Button onClick={handleCloseEditDialog}>
+                              Cancel
+                           </Button>
+                        </Box>
+                     </Dialog>
                      <Dialog
                         open={deleteDialogOpen}
                         onClose={handleCloseDeleteDialog}
