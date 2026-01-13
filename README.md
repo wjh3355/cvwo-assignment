@@ -145,7 +145,6 @@ erDiagram
 
 This project is still largely a work in progress and many features (especially UI/UX) have not been fully polished. Potential future improvements (from most to least important) include:
 
-- Edit posts and comments
 - Containerisation using Docker and then deployment
 - UI touch ups, Dark mode and mobile responsiveness
 - Search bar to search for posts and comments by keywords
