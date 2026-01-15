@@ -22,6 +22,10 @@ export const TOPICS: readonly Topic[] = [
    "photography",
 ] as const
 
+if (!import.meta.env.VITE_API_URL) {
+   throw new Error("VITE_API_URL is not defined")
+}
+
 export const api = axios.create({
    baseURL: import.meta.env.VITE_API_URL + "/api",
    withCredentials: true,
