@@ -90,7 +90,9 @@ The purpose of having two different authentication middleware functions is to en
 
 ## Database
 
-The project uses a local [PostgreSQL](https://www.postgresql.org/) relational database to store user, post, comment and vote data. The database schema is as follows. If the diagram is not rendering, make sure your markdown viewer supports [Mermaid](https://mermaid.js.org/) diagrams.
+The project uses a [PostgreSQL](https://www.postgresql.org/) relational database to store user, post, comment and vote data. The database schema is as follows. If the diagram is not rendering, make sure your markdown viewer supports [Mermaid](https://mermaid.js.org/) diagrams.
+
+**NOTE: The postgres database hosted on Render expires on 14/2/2026 due to free tier constraints. The site may not function properly from that date onwards.**
 
 ```mermaid
 erDiagram
@@ -178,4 +180,4 @@ I hereby declare that ChatGPT and Gemini were used in the project in the followi
 
 - How to migrate a local PostgreSQL database to a cloud-hosted one
 
-Last updated: 15/1/2025
+Last updated: 15/1/2026
