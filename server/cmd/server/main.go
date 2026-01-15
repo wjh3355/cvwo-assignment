@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -54,15 +55,19 @@ func main() {
 		log.Fatal("FRONTEND_URL environment variable is not set")
 	}
 
+	fmt.Println("=====================================")
+	fmt.Println("Starting server...")
+	fmt.Println("Frontend url: " + frontendURL)
+	fmt.Println("=====================================")
+
 	// set gin to release mode for production
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
 
 	// CORS configuration
-	// allow requests from all localhost origins
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{frontendURL},
+		AllowOrigins:     []string{frontendURL, "http://localhost:5173"},
 		AllowMethods:     []string{"GET", "POST", "DELETE", "PATCH", "OPTIONS", "PUT"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},

@@ -24,6 +24,8 @@ export const TOPICS: readonly Topic[] = [
 
 if (!import.meta.env.VITE_API_URL) {
    throw new Error("VITE_API_URL is not defined")
+} else {
+   console.log("Backend URL:", import.meta.env.VITE_API_URL)
 }
 
 export const api = axios.create({
