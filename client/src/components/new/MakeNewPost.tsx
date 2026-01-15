@@ -8,6 +8,8 @@ import { api } from "../../config"
 import TextField from "@mui/material/TextField"
 import toast from "react-hot-toast"
 import Typography from "@mui/material/Typography"
+import Alert from "@mui/material/Alert"
+import { Link } from "react-router"
 
 interface NewPostForm {
    title: string
@@ -45,7 +47,15 @@ export default function MakeNewPost({
    const qc = useQueryClient()
 
    if (!user) {
-      return <Typography>Please log in to create a post.</Typography>
+      return (
+         <Alert severity="warning">
+            Please{" "}
+            <Link to="/auth" className="underline text-blue-600">
+               log in
+            </Link>{" "}
+            to create a post.
+         </Alert>
+      )
    }
 
    const queryKey = ["posts", topic]
@@ -71,21 +81,31 @@ export default function MakeNewPost({
    }
 
    return (
-      <div>
+      <div className="w-full flex flex-col gap-4">
          <Typography variant="h5">Make new post for this topic:</Typography>
-         <TextField
-            {...register("title")}
-            onBlur={() => trigger("title")}
-            variant="standard"
-         />
-         <p>{errors.title?.message}</p>
-         <TextField
-            {...register("description")}
-            onBlur={() => trigger("description")}
-            multiline
-            rows={4}
-         />
-         <p>{errors.description?.message}</p>
+         <div>
+            <TextField
+               label="Title"
+               error={!!errors.title}
+               helperText={errors.title?.message}
+               className="w-full max-w-xl"
+               {...register("title")}
+               onBlur={() => trigger("title")}
+               variant="standard"
+            />
+         </div>
+         <div>
+            <TextField
+               label="Description"
+               error={!!errors.description}
+               helperText={errors.description?.message}
+               className="w-full max-w-xl"
+               {...register("description")}
+               onBlur={() => trigger("description")}
+               multiline
+               rows={4}
+            />
+         </div>
          <Button
             disabled={!isDirty || !isValid || isSubmitting}
             onClick={handleSubmit(handleCreateComment)}

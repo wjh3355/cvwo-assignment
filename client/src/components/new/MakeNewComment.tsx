@@ -6,6 +6,8 @@ import { useQueryClient } from "@tanstack/react-query"
 import { api } from "../../config"
 import TextField from "@mui/material/TextField"
 import toast from "react-hot-toast"
+import Alert from "@mui/material/Alert"
+import { Link } from "react-router"
 
 interface NewCommentForm {
    content: string
@@ -15,7 +17,13 @@ interface NewCommentData extends NewCommentForm {
    postId: number
 }
 
-export default function MakeNewComment({ postId }: { postId: number }) {
+export default function MakeNewComment({
+   postId,
+   user,
+}: {
+   postId: number
+   user: any
+}) {
    const {
       register,
       handleSubmit,
@@ -32,6 +40,18 @@ export default function MakeNewComment({ postId }: { postId: number }) {
    })
 
    const qc = useQueryClient()
+
+   if (!user) {
+      return (
+         <Alert severity="warning">
+            Please{" "}
+            <Link to="/auth" className="underline text-blue-600">
+               log in
+            </Link>{" "}
+            to create a comment.
+         </Alert>
+      )
+   }
 
    const queryKey = ["comments", String(postId)]
 
@@ -56,15 +76,17 @@ export default function MakeNewComment({ postId }: { postId: number }) {
    }
 
    return (
-      <div>
+      <div className="w-full flex flex-col gap-4">
          <TextField
+            error={!!errors.content}
+            helperText={errors.content?.message}
             {...register("content")}
             onBlur={() => trigger("content")}
+            className="w-full max-w-xl"
             label="Comment"
             multiline
             rows={4}
          />
-         <p>{errors.content?.message}</p>
          <Button
             disabled={!isDirty || !isValid || isSubmitting}
             onClick={handleSubmit(handleCreateComment)}

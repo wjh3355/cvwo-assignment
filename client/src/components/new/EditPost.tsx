@@ -68,20 +68,24 @@ export default function EditPost({
    }
 
    return (
-      <div>
+      <div className="flex flex-col gap-4">
          <TextField
+            label="Title"
+            error={!!errors.newTitle}
+            helperText={errors.newTitle?.message}
             {...register("newTitle")}
             onBlur={() => trigger("newTitle")}
             variant="standard"
          />
-         <p>{errors.newTitle?.message}</p>
          <TextField
+            label="Description"
+            error={!!errors.newDescription}
+            helperText={errors.newDescription?.message}
             {...register("newDescription")}
             onBlur={() => trigger("newDescription")}
             multiline
             rows={4}
          />
-         <p>{errors.newDescription?.message}</p>
          <Button
             disabled={!isValid || isSubmitting}
             onClick={handleSubmit(handleCreateComment)}

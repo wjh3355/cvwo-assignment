@@ -78,7 +78,7 @@ export default function TopicPostElement({
                         open={editDialogOpen}
                         onClose={handleCloseEditDialog}
                      >
-                        <Box p={2} sx={{ minWidth: 500 }}>
+                        <Box p={2} sx={{ minWidth: 600 }}>
                            <Typography>Edit Post</Typography>
                            <EditPost
                               post={post}
@@ -88,7 +88,10 @@ export default function TopicPostElement({
                                  handleMenuClose()
                               }}
                            />
-                           <Button onClick={handleCloseEditDialog}>
+                           <Button
+                              onClick={handleCloseEditDialog}
+                              className="w-full"
+                           >
                               Cancel
                            </Button>
                         </Box>

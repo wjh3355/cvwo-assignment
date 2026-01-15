@@ -1,6 +1,6 @@
-import { useParams } from "react-router"
+import { Link, useParams } from "react-router"
 import NotFound from "../NotFound"
-import { formatDate, isValidTopic } from "../../utils"
+import { capitalise, formatDate, isValidTopic } from "../../utils"
 import { useFetch } from "../../hooks/useFetch"
 import type { Post, Comment } from "../../types"
 import GenericVoteDisplay from "../voting/GenericVoteDisplay"
@@ -9,8 +9,12 @@ import Card from "@mui/material/Card"
 import CardHeader from "@mui/material/CardHeader"
 import CardContent from "@mui/material/CardContent"
 import Typography from "@mui/material/Typography"
-import MakeNew from "../new/MakeNewComment"
+import MakeNewComment from "../new/MakeNewComment"
 import PostPageComment from "./PostPageComment"
+import GenericLoading from "../GenericLoading"
+import ErrorPage from "../ErrorPage"
+import Alert from "@mui/material/Alert"
+import Breadcrumbs from "@mui/material/Breadcrumbs"
 
 export default function PostPage() {
    const { topic, postId } = useParams()
@@ -37,21 +41,36 @@ export default function PostPage() {
 
    if (!validTopic) return <NotFound />
 
-   if (postsLoading) return <div>Loading...</div>
-   if (postsError || !posts) return <div>Error loading post.</div>
+   if (postsLoading) return <GenericLoading />
+   if (postsError || !posts) return <ErrorPage str="Error loading post." />
 
    const post = posts.find((p) => p.id == Number(postId))
    if (!post) return <NotFound />
 
-   if (commentsLoading) return <div>Loading comments...</div>
-   if (commentsError || !comments) return <div>Error loading comments.</div>
+   if (commentsLoading) return <GenericLoading />
+   if (commentsError || !comments)
+      return <ErrorPage str="Error loading comments." />
 
    return (
-      <div>
+      <div className="w-full max-w-6xl flex flex-col gap-4">
+         <Breadcrumbs aria-label="breadcrumb">
+            <Link color="inherit" to="/">
+               Home
+            </Link>
+            <Link color="inherit" to={`/${topic}`}>
+               {capitalise(topic)}
+            </Link>
+            <Typography>Post #{post.id}</Typography>
+         </Breadcrumbs>
+
+         <Typography variant="h4" gutterBottom>
+            Topic: {topic}
+         </Typography>
+
          <Card sx={{ mb: 3 }}>
             <CardHeader
                title={
-                  <Typography variant="h4">
+                  <Typography variant="h5">
                      #{post.id} | {post.title}
                   </Typography>
                }
@@ -74,8 +93,18 @@ export default function PostPage() {
             </CardContent>
          </Card>
 
+         {useUserError && (
+            <Alert severity="warning">
+               Please{" "}
+               <Link to="/auth" className="underline text-blue-600">
+                  log in
+               </Link>{" "}
+               to vote on posts and comments.
+            </Alert>
+         )}
+
          {comments.length === 0 ? (
-            <Typography>No comments yet.</Typography>
+            <Alert severity="info">No comments yet.</Alert>
          ) : (
             <ul>
                {comments.map((comment) => (
@@ -89,7 +118,7 @@ export default function PostPage() {
             </ul>
          )}
 
-         <MakeNew postId={post.id} />
+         <MakeNewComment postId={post.id} user={currUser} />
       </div>
    )
 }

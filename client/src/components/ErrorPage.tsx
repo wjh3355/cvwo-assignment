@@ -1,13 +1,14 @@
+import Button from "@mui/material/Button"
 import { useNavigate } from "react-router"
 
-export default function ErrorPage() {
+export default function ErrorPage({ str }: { str?: string }) {
    const nav = useNavigate()
 
    return (
       <div>
-         <p>Oops! Something went wrong.</p>
-         <button onClick={() => window.location.reload()}>Reload</button>
-         <button onClick={() => nav("/")}>Go Home</button>
+         <p>{str ?? "Oops! Something went wrong."}</p>
+         <Button onClick={() => window.location.reload()}>Reload</Button>
+         <Button onClick={() => nav("/")}>Go Home</Button>
       </div>
    )
 }

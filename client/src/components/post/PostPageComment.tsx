@@ -82,7 +82,10 @@ export default function PostPageComment({
                                  handleMenuClose()
                               }}
                            />
-                           <Button onClick={handleCloseEditDialog}>
+                           <Button
+                              onClick={handleCloseEditDialog}
+                              className="w-full"
+                           >
                               Cancel
                            </Button>
                         </Box>

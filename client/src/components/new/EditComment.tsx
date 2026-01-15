@@ -36,7 +36,7 @@ export default function EditComment({
             newContent: z.string().nonempty({ message: "Content is required" }),
          })
       ),
-      defaultValues: { newContent: "" },
+      defaultValues: { newContent: comment.content },
    })
 
    const qc = useQueryClient()
@@ -64,15 +64,16 @@ export default function EditComment({
    }
 
    return (
-      <div>
+      <div className="flex flex-col gap-4">
          <TextField
             {...register("newContent")}
             onBlur={() => trigger("newContent")}
-            label="Comment"
             multiline
             rows={4}
+            error={!!errors.newContent}
+            helperText={errors.newContent?.message}
+            label="Content"
          />
-         <p>{errors.newContent?.message}</p>
          <Button
             disabled={!isValid || isSubmitting}
             onClick={handleSubmit(handleCreateComment)}
