@@ -1,6 +1,6 @@
 # TalkSpace
 
-This repo contains the source code for **TalkSpace**, a web forum inspired by [Reddit](https://www.reddit.com/) that allows users to post content, comment, and vote on submissions (posts and comments). Each post must adhere to a certain topic (Technology, art, science...). In an effort to make the content accessible to all, TalkSpace does not require users to create an account or log in to view posts and comments. However, one does need an account to create posts, comment, and vote.
+This repo contains the source code for [**TalkSpace**](https://talkspace-cvwo.netlify.app/), a web forum inspired by [Reddit](https://www.reddit.com/) that allows users to post content, comment, and vote on submissions (posts and comments). Each post must adhere to a certain topic (Technology, art, science...). In an effort to make the content accessible to all, TalkSpace does not require users to create an account or log in to view posts and comments. However, one does need an account to create posts, comment, and vote.
 
 ## Code Structure
 
@@ -8,7 +8,7 @@ This is a monorepo containing the client code in the `client/` directory and the
 
 ## Client
 
-The client-facing website is built using [React](https://react.dev/) (with [Vite](https://vite.dev/)) and TypeScript (port 5173 for dev / 4173 for production). It handles the user interface, enabling users to interact with the forum, create posts, comment, and vote etc. Major libraries/technologies used include:
+The client-facing website is built using [React](https://react.dev/) (with [Vite](https://vite.dev/)) and TypeScript. It handles the user interface, enabling users to interact with the forum, create posts, comment, and vote etc. Major libraries/technologies used include:
 
 - [React Router](https://reactrouter.com/) for routing and navigation
 - [Axios](https://axios-http.com/) for making HTTP requests to backend
@@ -22,7 +22,8 @@ It communicates with the server via RESTful API endpoints.
 
 ```text
 client/
-├── public/                 # Static assets (Unused)
+├── public/                
+│   └── _redirects      # For Netlify to redirect all routes to index.html, for SPA structure to work (React Router handles routing)
 ├── src/
 │   ├── components /
 │   │   ├── auth/         # Authentication components (login, register pages, handler functions)
@@ -52,7 +53,7 @@ client/
 
 ## Server
 
-The backend server is a [Gin](https://gin-gonic.com/en/) (Golang) application (port 8080). Every endpoint starts with `/api`. It handles user authentication, post and comment CRUD functions, and voting functionality. It exposes RESTful API endpoints requested by the client.
+The backend server is a [Gin](https://gin-gonic.com/en/) (Golang) application. Every endpoint exposed starts with `/api`. It handles user authentication, post and comment CRUD functions, and voting functionality. It exposes RESTful API endpoints requested by the client.
 
 ### Authentication
 
@@ -141,11 +142,14 @@ erDiagram
    COMMENTS ||--o{ COMMENT_VOTES : receives
 ```
 
+## Deployment
+
+The application is currently deployed on [Netlify](https://www.netlify.com/) (client) and [Render](https://render.com) (server). The PostgreSQL database is also hosted on Render.
+
 ## Future Improvements
 
 This project is still largely a work in progress and many features (especially UI/UX) have not been fully polished. Potential future improvements (from most to least important) include:
 
-- Containerisation using Docker and then deployment
 - UI touch ups, Dark mode and mobile responsiveness
 - Search bar to search for posts and comments by keywords
 - User profiles to view a particular user's posts and comments
@@ -172,4 +176,6 @@ I hereby declare that ChatGPT and Gemini were used in the project in the followi
 
 - How Mermaid syntax works in markdown
 
-Last updated: 10/1/2025
+- How to migrate a local PostgreSQL database to a cloud-hosted one
+
+Last updated: 15/1/2025
