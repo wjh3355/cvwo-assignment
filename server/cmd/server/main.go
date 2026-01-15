@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -50,10 +49,10 @@ func main() {
 	jwtSecret := []byte(secret)
 
 	// get frontend url from environment variable
-	// frontendURL := os.Getenv("FRONTEND_URL")
-	// if frontendURL == "" {
-	// 	frontendURL = "http://localhost:5173"
-	// }
+	frontendURL := os.Getenv("FRONTEND_URL")
+	if frontendURL == "" {
+		log.Fatal("FRONTEND_URL environment variable is not set")
+	}
 
 	// set gin to release mode for production
 	gin.SetMode(gin.ReleaseMode)
@@ -63,9 +62,7 @@ func main() {
 	// CORS configuration
 	// allow requests from all localhost origins
 	router.Use(cors.New(cors.Config{
-		AllowOriginFunc: func(origin string) bool {
-			return strings.HasPrefix(origin, "http://localhost:") || strings.HasPrefix(origin, "http://127.0.0.1:")
-		},
+		AllowOrigins:     []string{frontendURL},
 		AllowMethods:     []string{"GET", "POST", "DELETE", "PATCH", "OPTIONS", "PUT"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
