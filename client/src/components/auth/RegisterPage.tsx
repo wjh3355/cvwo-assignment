@@ -53,39 +53,37 @@ export default function Register() {
          onSubmit={handleSubmit((data) =>
             registerHandler(data, qc, nav, reset)
          )}
+         className="flex flex-col gap-4"
       >
          <title>Login</title>
 
-         <fieldset>
-            <legend>Username</legend>
-            <TextField
-               variant="standard"
-               {...register("username")}
-               onBlur={() => trigger("username")}
-               autoFocus={true}
-            />
-            <span>{errors.username?.message}</span>
-         </fieldset>
+         <TextField
+            label="Username"
+            error={!!errors.username}
+            helperText={errors.username?.message}
+            variant="standard"
+            {...register("username")}
+            onBlur={() => trigger("username")}
+            autoFocus={true}
+         />
 
-         <fieldset>
-            <legend>Password</legend>
-            <TextField
-               variant="standard"
-               {...register("password")}
-               onBlur={() => trigger("password")}
-            />
-            <span>{errors.password?.message}</span>
-         </fieldset>
+         <TextField
+            label="Password"
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            variant="standard"
+            {...register("password")}
+            onBlur={() => trigger("password")}
+         />
 
-         <fieldset>
-            <legend>Confirm Password</legend>
-            <TextField
-               variant="standard"
-               {...register("confirmPassword")}
-               onBlur={() => trigger("confirmPassword")}
-            />
-            <span>{errors.confirmPassword?.message}</span>
-         </fieldset>
+         <TextField
+            label="Confirm Password"
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword?.message}
+            variant="standard"
+            {...register("confirmPassword")}
+            onBlur={() => trigger("confirmPassword")}
+         />
 
          <div>
             <Button

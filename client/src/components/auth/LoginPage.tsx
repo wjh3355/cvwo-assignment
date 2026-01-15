@@ -33,30 +33,29 @@ export default function Login() {
    return (
       <form
          onSubmit={handleSubmit((data) => loginHandler(data, qc, nav, reset))}
+         className="flex flex-col gap-4"
       >
          <title>Login</title>
 
-         <fieldset>
-            <legend>Username</legend>
-            <TextField
-               {...register("username")}
-               onBlur={() => trigger("username")}
-               autoFocus={true}
-               variant="standard"
-            />
-            <span>{errors.username?.message}</span>
-         </fieldset>
+         <TextField
+            label="Username"
+            error={!!errors.username}
+            helperText={errors.username?.message}
+            {...register("username")}
+            onBlur={() => trigger("username")}
+            autoFocus={true}
+            variant="standard"
+         />
 
-         <fieldset>
-            <legend>Password</legend>
-            <TextField
-               {...register("password")}
-               type="password"
-               onBlur={() => trigger("password")}
-               variant="standard"
-            />
-            <span>{errors.password?.message}</span>
-         </fieldset>
+         <TextField
+            label="Password"
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            {...register("password")}
+            type="password"
+            onBlur={() => trigger("password")}
+            variant="standard"
+         />
 
          <div>
             <Button
