@@ -56,7 +56,7 @@ func main() {
 	// }
 
 	// set gin to release mode for production
-	// gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
 
