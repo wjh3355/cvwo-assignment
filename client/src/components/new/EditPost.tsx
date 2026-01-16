@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import type { Post, Topic } from "../../types"
+import type { Post } from "../../types"
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js"
 import { z } from "zod"
 import Button from "@mui/material/Button"
@@ -23,7 +23,7 @@ export default function EditPost({
    cb,
 }: {
    post: Post
-   topic: Topic
+   topic: string
    cb: () => void
 }) {
    const {

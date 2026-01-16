@@ -1,9 +1,8 @@
 import axios, { isAxiosError } from "axios"
-import type { Topic } from "./types"
 import type { QueryClient } from "@tanstack/react-query"
 import toast from "react-hot-toast"
 
-export const TOPICS: readonly Topic[] = [
+export const TOPICS: readonly string[] = [
    "technology",
    "health",
    "science",

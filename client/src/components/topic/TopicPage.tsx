@@ -1,7 +1,7 @@
 import { useParams, useNavigate, Link } from "react-router"
 import { useFetch } from "../../hooks/useFetch"
 import type { Post } from "../../types"
-import { capitalise, isValidTopic } from "../../utils"
+import { capitalise } from "../../utils"
 import NotFound from "../NotFound"
 import useUser from "../../hooks/useUser"
 import MakeNewPost from "../new/MakeNewPost"
@@ -22,12 +22,12 @@ export default function TopicPage() {
       isError,
       isLoading,
    } = useFetch<Post[]>(["posts", topic!], `/posts/${topic}`, {
-      enabled: isValidTopic(topic),
+      enabled: !!topic,
    })
 
    const { isError: useUserError, data: thisUser } = useUser()
 
-   if (!isValidTopic(topic)) {
+   if (!topic) {
       return <NotFound />
    }
 

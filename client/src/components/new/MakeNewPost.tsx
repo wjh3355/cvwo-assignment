@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import type { Topic, User } from "../../types"
+import type { User } from "../../types"
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js"
 import { z } from "zod"
 import Button from "@mui/material/Button"
@@ -17,13 +17,13 @@ interface NewPostForm {
 }
 
 interface NewPostData extends NewPostForm {
-   topic: Topic
+   topic: string
 }
 export default function MakeNewPost({
    topic,
    user,
 }: {
-   topic: Topic
+   topic: string
    user: User | undefined
 }) {
    const {

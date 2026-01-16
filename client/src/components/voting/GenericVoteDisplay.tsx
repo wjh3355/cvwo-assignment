@@ -3,7 +3,7 @@ import IconButton from "@mui/material/IconButton"
 import Typography from "@mui/material/Typography"
 import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded"
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded"
-import type { Comment, Post, Topic, VoteType } from "../../types"
+import type { Comment, Post, VoteType } from "../../types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "../../config"
 import toast from "react-hot-toast"
@@ -11,7 +11,7 @@ import toast from "react-hot-toast"
 interface VoteDisplayProps<T extends Post | Comment> {
    thing: T
    isUserAuthenticated: boolean
-   topic?: Topic
+   topic?: string
    postId?: string
    forWhat: "post" | "comment"
    isADeletedPost?: boolean

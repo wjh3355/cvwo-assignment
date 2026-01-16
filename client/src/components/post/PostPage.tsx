@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router"
 import NotFound from "../NotFound"
-import { capitalise, formatDate, isValidTopic } from "../../utils"
+import { capitalise, formatDate } from "../../utils"
 import { useFetch } from "../../hooks/useFetch"
 import type { Post, Comment } from "../../types"
 import GenericVoteDisplay from "../voting/GenericVoteDisplay"
@@ -19,14 +19,12 @@ import Breadcrumbs from "@mui/material/Breadcrumbs"
 export default function PostPage() {
    const { topic, postId } = useParams()
 
-   const validTopic = isValidTopic(topic)
-
    const {
       data: posts,
       isLoading: postsLoading,
       isError: postsError,
    } = useFetch<Post[]>(["posts", topic!], `/posts/${topic}`, {
-      enabled: validTopic,
+      enabled: !!topic,
    })
 
    const { isError: useUserError, data: currUser } = useUser()
@@ -36,10 +34,10 @@ export default function PostPage() {
       isLoading: commentsLoading,
       isError: commentsError,
    } = useFetch<Comment[]>(["comments", postId!], `/comments/${postId}`, {
-      enabled: validTopic && !!postId,
+      enabled: !!topic && !!postId,
    })
 
-   if (!validTopic) return <NotFound />
+   if (!topic) return <NotFound />
 
    if (postsLoading) return <GenericLoading />
    if (postsError || !posts) return <ErrorPage str="Error loading post." />

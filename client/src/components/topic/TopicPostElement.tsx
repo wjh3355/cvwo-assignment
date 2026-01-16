@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography"
 import { type NavigateFunction } from "react-router"
 import { formatDate } from "../../utils"
 import GenericVoteDisplay from "../voting/GenericVoteDisplay"
-import type { Post, Topic, User } from "../../types"
+import type { Post, User } from "../../types"
 import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
 import { useState, type MouseEvent } from "react"
@@ -20,7 +20,7 @@ import EditPost from "../new/EditPost"
 
 interface TopicPostElementProps {
    post: Post
-   topic: Topic
+   topic: string
    nav: NavigateFunction
    currUser: User | undefined
    useUserError: boolean

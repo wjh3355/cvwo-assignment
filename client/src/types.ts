@@ -3,27 +3,9 @@ export type User = {
    username: string
 }
 
-export type Topic =
-   | "technology"
-   | "health"
-   | "science"
-   | "art"
-   | "history"
-   | "sports"
-   | "music"
-   | "travel"
-   | "food"
-   | "education"
-   | "finance"
-   | "environment"
-   | "politics"
-   | "culture"
-   | "literature"
-   | "photography"
-
 export type Post = {
    id: number // unique identifier
-   topic: Topic
+   topic: string
    postedBy: User
    postedOn: string
    title: string
