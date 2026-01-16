@@ -17,6 +17,7 @@ import (
 	"server/internal/handlers/auth"
 	"server/internal/handlers/comments"
 	"server/internal/handlers/posts"
+	"server/internal/handlers/topics"
 	"server/internal/handlers/voting"
 	"server/internal/middleware"
 )
@@ -113,6 +114,16 @@ func main() {
 
 	hard := api.Group("/")
 	hard.Use(middleware.HardAuthMiddleware(jwtSecret))
+
+	/////////////////////////////////////
+	// TOPICS ENDPOINTS
+	/////////////////////////////////////
+
+	// get all topics endpoint
+	soft.GET("/topics", topics.GetAllTopics(pool))
+
+	// create new topic endpoint (REQUIRES AUTH)
+	hard.POST("/topics", topics.MakeNewTopic(pool))
 
 	/////////////////////////////////////
 	// POSTS ENDPOINTS

@@ -8,22 +8,12 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"server/internal/models"
-	"server/internal/utils"
 )
 
 func GetPostsOfTopic(pool *pgxpool.Pool) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		topic := c.Param("topic")
-
-		if !utils.ValidTopics[topic] {
-			fmt.Printf("Topic '%s' does not exist\n", topic)
-			c.JSON(http.StatusNotFound, gin.H{
-				"error": fmt.Sprintf("Topic '%s' does not exist", topic),
-			})
-			c.Abort()
-			return
-		}
 
 		var userId *int
 		isAuthenticated, exists := c.Get("isAuthenticated")
@@ -40,7 +30,7 @@ func GetPostsOfTopic(pool *pgxpool.Pool) gin.HandlerFunc {
 		rows, err := pool.Query(
 			c.Request.Context(),
 			`SELECT
-				p.id, p.topic, p.title, p.description, p.posted_on AT TIME ZONE 'Asia/Singapore' as posted_on,
+				p.id, t.name, p.title, p.description, p.posted_on AT TIME ZONE 'Asia/Singapore' as posted_on,
 				u.id, u.username,
 				COUNT(DISTINCT c.id) AS comment_count,
 				(SELECT COALESCE(SUM(vote_type), 0) FROM post_votes pv WHERE pv.post_id = p.id) AS vote_score,
@@ -55,8 +45,10 @@ func GetPostsOfTopic(pool *pgxpool.Pool) gin.HandlerFunc {
 				ON p.posted_by = u.id
 			LEFT JOIN comments c
 				ON c.post_id = p.id
-			WHERE p.topic = $1
-			GROUP BY p.id, p.topic, p.title, p.description, p.posted_on, u.id, u.username
+			LEFT JOIN topics t
+				ON p.topic = t.id
+			WHERE t.name = $1
+			GROUP BY p.id, t.name, p.title, p.description, p.posted_on, u.id, u.username
 			ORDER BY p.posted_on DESC`,
 			topic,
 			userId,

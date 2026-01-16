@@ -2,25 +2,6 @@ import axios, { isAxiosError } from "axios"
 import type { QueryClient } from "@tanstack/react-query"
 import toast from "react-hot-toast"
 
-export const TOPICS: readonly string[] = [
-   "technology",
-   "health",
-   "science",
-   "art",
-   "history",
-   "sports",
-   "music",
-   "travel",
-   "food",
-   "education",
-   "finance",
-   "environment",
-   "politics",
-   "culture",
-   "literature",
-   "photography",
-] as const
-
 if (!import.meta.env.VITE_API_URL) {
    throw new Error("VITE_API_URL is not defined")
 } else {

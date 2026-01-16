@@ -1,14 +1,21 @@
 import { useNavigate } from "react-router"
-import { TOPICS } from "../config"
 import { capitalise } from "../utils"
 import Button from "@mui/material/Button"
 import Container from "@mui/material/Container"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import Paper from "@mui/material/Paper"
+import { useFetch } from "../hooks/useFetch"
+import GenericLoading from "./GenericLoading"
+import MakeNewTopic from "./new/MakeNewTopic"
+import useUser from "../hooks/useUser"
 
 export default function Home() {
    const nav = useNavigate()
+
+   const { data: topics } = useFetch<string[]>(["topics"], `/topics`)
+
+   const { data: user } = useUser()
 
    return (
       <Container maxWidth="md">
@@ -24,23 +31,29 @@ export default function Home() {
                   gap={2}
                   justifyContent="center"
                >
-                  {TOPICS.map((topic) => (
-                     <Button
-                        key={topic}
-                        onClick={() => nav(`/${topic}`)}
-                        variant="contained"
-                        size="large"
-                        sx={{
-                           minWidth: 140,
-                           textTransform: "none",
-                           borderRadius: 2,
-                        }}
-                     >
-                        {capitalise(topic)}
-                     </Button>
-                  ))}
+                  {!topics ? (
+                     <GenericLoading />
+                  ) : (
+                     topics.map((topic) => (
+                        <Button
+                           key={topic}
+                           onClick={() => nav(`/${topic}`)}
+                           variant="contained"
+                           size="large"
+                           sx={{
+                              minWidth: 140,
+                              textTransform: "none",
+                              borderRadius: 2,
+                           }}
+                        >
+                           {capitalise(topic)}
+                        </Button>
+                     ))
+                  )}
                </Stack>
             </Paper>
+
+            <MakeNewTopic user={user} />
          </Stack>
       </Container>
    )

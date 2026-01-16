@@ -41,7 +41,7 @@ export default function TopicPage() {
          </Breadcrumbs>
 
          <Typography variant="h4" gutterBottom>
-            Topic: {topic}
+            Topic: {capitalise(topic)}
          </Typography>
          {isLoading && <GenericLoading />}
          {isError && <ErrorPage str="Error loading posts." />}
