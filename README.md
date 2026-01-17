@@ -1,6 +1,6 @@
 # TalkSpace
 
-This repo contains the source code for [**TalkSpace**](https://talkspace-cvwo.netlify.app/), a web forum inspired by [Reddit](https://www.reddit.com/) that allows users to post content, comment, and vote on submissions (posts and comments). Each post must adhere to a certain topic (Technology, art, science...). In an effort to make the content accessible to all, TalkSpace does not require users to create an account or log in to view posts and comments. However, one does need an account to create posts, comment, and vote.
+This repo contains the source code for [**TalkSpace**](https://talkspace-cvwo.netlify.app/), a web forum inspired by [Reddit](https://www.reddit.com/) that allows users to make topics, post content, comment, and vote on submissions (posts and comments). In an effort to make the content accessible to all, TalkSpace does not require users to create an account or log in to view posts and comments. However, one does need an account to create topics and posts, comment, and vote.
 
 ## Code Structure
 
@@ -78,6 +78,8 @@ The purpose of having two different authentication middleware functions is to en
 
 ### Other Endpoints
 
+- `GET /api/topics` - Retrieves a list of all available topics.
+- `POST /api/topics` - Creates a new topic. Requires hard authentication.
 - `GET /api/posts/:topic` - Retrieves all posts under the specified topic, including the number of comments, votes (num of upvotes - num of downvotes), and the user's vote (if authenticated) for each post. Uses soft authentication.
 - `POST /api/posts` - Creates a new post. Requires hard authentication.
 - `PATCH /api/posts` - Edits an existing post. Requires hard authentication.
@@ -90,12 +92,18 @@ The purpose of having two different authentication middleware functions is to en
 
 ## Database
 
-The project uses a [PostgreSQL](https://www.postgresql.org/) relational database to store user, post, comment and vote data. The database schema is as follows. If the diagram is not rendering, make sure your markdown viewer supports [Mermaid](https://mermaid.js.org/) diagrams.
+The project uses a [PostgreSQL](https://www.postgresql.org/) relational database to store user, topic, post, comment and vote data. The database schema is as follows. If the diagram is not rendering, make sure your markdown viewer supports [Mermaid](https://mermaid.js.org/) diagrams.
 
 **NOTE: The postgres database hosted on Render expires on 14/2/2026 due to free tier constraints. The site may not function properly from that date onwards.**
 
 ```mermaid
 erDiagram
+
+   TOPICS {
+      int id PK
+      string name
+   }
+
    USERS {
       int id PK
       string username
@@ -105,7 +113,7 @@ erDiagram
 
    POSTS {
       int id PK
-      topic_name topic
+      int topic FK
       int posted_by FK
       string title
       string description
@@ -132,8 +140,11 @@ erDiagram
       int vote_value
    }
 
+   USERS ||--o{ TOPICS : creates
    USERS ||--o{ POSTS : creates
    USERS ||--o{ COMMENTS : writes
+
+   TOPICS ||--o{ POSTS : contains
 
    POSTS ||--o{ COMMENTS : has
    POSTS ||--o{ POST_VOTES : receives
@@ -180,4 +191,4 @@ I hereby declare that ChatGPT and Gemini were used in the project in the followi
 
 - How to migrate a local PostgreSQL database to a cloud-hosted one
 
-Last updated: 15/1/2026
+Last updated: 17/1/2026
