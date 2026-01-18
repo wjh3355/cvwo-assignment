@@ -116,7 +116,7 @@ export default function PostPage() {
             </ul>
          )}
 
-         <MakeNewComment postId={post.id} user={currUser} />
+         <MakeNewComment postId={post.id} user={currUser} topic={topic} />
       </div>
    )
 }

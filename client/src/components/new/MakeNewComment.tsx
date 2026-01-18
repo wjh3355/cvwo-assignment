@@ -20,9 +20,11 @@ interface NewCommentData extends NewCommentForm {
 export default function MakeNewComment({
    postId,
    user,
+   topic,
 }: {
    postId: number
    user: any
+   topic: string
 }) {
    const {
       register,
@@ -53,7 +55,9 @@ export default function MakeNewComment({
       )
    }
 
-   const queryKey = ["comments", String(postId)]
+   const queryKey1 = ["comments", String(postId)]
+
+   const queryKey2 = ["posts", topic]
 
    async function handleCreateComment(data: NewCommentForm) {
       const postReq: NewCommentData = {
@@ -64,7 +68,8 @@ export default function MakeNewComment({
       try {
          await api.post("/comments", postReq)
 
-         qc.invalidateQueries({ queryKey })
+         qc.invalidateQueries({ queryKey: queryKey1 })
+         qc.invalidateQueries({ queryKey: queryKey2 })
 
          reset()
 
