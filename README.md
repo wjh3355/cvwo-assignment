@@ -266,6 +266,7 @@ I hereby declare that ChatGPT and Gemini were used in the project in the followi
 
 - How Mermaid syntax works in markdown
 
+- How pgdump works
 - How to migrate a local PostgreSQL database to a cloud-hosted one
 
-Last updated: 17/1/2026
+Last updated: 18/1/2026
