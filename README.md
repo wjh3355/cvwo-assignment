@@ -1,6 +1,6 @@
 # TalkSpace
 
-This repo contains the source code for [**TalkSpace**](https://talkspace-cvwo.netlify.app/), a web forum inspired by [Reddit](https://www.reddit.com/) that allows users to make topics, post content, comment, and vote on submissions (posts and comments). In an effort to make the content accessible to all, TalkSpace does not require users to create an account or log in to view posts and comments. However, one does need an account to create topics and posts, comment, and vote.
+This repo contains the source code for [**TalkSpace**](https://talkspace-cvwo.netlify.app/), a web forum inspired by [Reddit](https://www.reddit.com/) that allows users to make topics, post content, comment, and vote on submissions (posts and comments). TalkSpace does not require users to create an account or log in to view posts and comments. However, one does need an account to create topics and posts, comment, and vote.
 
 ## Code Structure
 
@@ -8,7 +8,7 @@ This is a monorepo containing the client code in the `client/` directory and the
 
 ## Client
 
-The client-facing website is built using [React](https://react.dev/) (with [Vite](https://vite.dev/)) and TypeScript. It handles the user interface, enabling users to interact with the forum, create posts, comment, and vote etc. Major libraries/technologies used include:
+The client-facing website is built using [React](https://react.dev/) (with [Vite](https://vite.dev/)) and TypeScript. Major libraries/technologies used include:
 
 - [React Router](https://reactrouter.com/) for routing and navigation
 - [Axios](https://axios-http.com/) for making HTTP requests to backend
@@ -16,7 +16,6 @@ The client-facing website is built using [React](https://react.dev/) (with [Vite
 - [Tailwind CSS](https://tailwindcss.com/) for easy styling
 - [Material UI (MUI)](https://mui.com/) for premade UI components
 - [React Hook Form](https://react-hook-form.com/) for form handling (login, signup, post/comment creation/editing)
-It communicates with the server via RESTful API endpoints.
 
 ### File Structure
 
@@ -53,18 +52,18 @@ client/
 
 ## Server
 
-The backend server is a [Gin](https://gin-gonic.com/en/) (Golang) application. Every endpoint exposed starts with `/api`. It handles user authentication, post and comment CRUD functions, and voting functionality. It exposes RESTful API endpoints requested by the client.
+The backend server is a [Gin](https://gin-gonic.com/en/) (Golang) application. Every endpoint exposed starts with `/api`. It exposes RESTful API endpoints requested by the client.
 
 ### Authentication
 
-Authentication is handled using Json Web Tokens (JWTs) using HTTP-Only Cookies for storage. Upon successful login/registration, the server generates a JWT using the user's username and ID (and a secret key) and sends it to the client. The client includes this JWT in every subsequent request to authenticate the user. The server uses the same secret key to verify the JWT and extract user information.
+Authentication is handled using Json Web Tokens (JWTs) using HTTP-Only Cookies for storage. Upon successful login/registration, the server generates a JWT and sends it to the client. The client includes this JWT in every subsequent request to authenticate the user.
 
 #### Authentication Endpoints
 
-- `POST /api/login` - Logs in a user. The client sends the user's username and password in the request body. The server compares the *hashed* password with the stored hash in the database. If it matches, a JWT is generated and sent back to the client with a status code of 200 (success). If not, a 401 (unauthorized) status code is returned.
-- `POST /api/register` - Registers a new user. The client sends the desired username and password in the request body. The server hashes the password and attempts to store the new user in the database. If a user with the same username already exists, a 409 (conflict) status code is returned. This is automatic because the username field is set to be unique in the database (see below). If registration is successful, a JWT is generated in the same way as above and sent back to the client with a status code of 200 (success).
+- `POST /api/login` - Logs in a user. The client sends the user's username and password in the request body. The server compares the *hashed* password with the stored hash in the database. If it matches, a JWT is generated and sent back to the client with a status code of 200 (success).
+- `POST /api/register` - Registers a new user. The client sends the desired username and password in the request body. The server hashes the password and attempts to store the new user in the database. If a user with the same username already exists, a 409 (conflict) status code is returned. If registration is successful, a JWT is generated and sent back to the client with a status code of 200 (success).
 - `POST /api/logout` - Logs out a user by invalidating the JWT cookie.
-- `GET /api/check-auth` - Checks if the user is authenticated by verifying the JWT cookie (this is called by `useUser` on the client, see above). If valid, returns user information with status code 200 (success). If not, returns a 401 (unauthorized) status code.
+- `GET /api/check-auth` - Checks if the user is authenticated by verifying the JWT cookie (this is called by `useUser` on the client, see above). If valid, returns user information with status code 200 (success).
 
 ### Middleware
 
@@ -74,7 +73,7 @@ The backend utilises 3 different middleware functions:
 - `middleware.SoftAuthMiddleware()` - Checks for the presence of a valid JWT cookie. If present and valid, it extracts user information and attaches it to the request context with a `isAuthenticated=true` flag. If not present or invalid, it **allows the request to proceed** without user information (and sets `isAuthenticated=false`).
 - `middleware.HardAuthMiddleware()` - Same as SoftAuthMiddleware, but if the JWT cookie is not present or invalid, it **aborts the request** and returns a 401 (unauthorized) status code.
 
-The purpose of having two different authentication middleware functions is to enable both protected and unprotected routes. For example, creating/editing/deleting a post/comment or voting (downvote/upvote) requires the user to be authenticated (HardAuthMiddleware), whereas simply viewing posts/comments does not (SoftAuthMiddleware). However, if the user is authenticated, we still want their identity so we can display the appropriate UI (show edit/delete buttons for their own posts/comments, and also highlight their vote direction). This matches Reddit's functionality (one does not need an account to view information, but having an account enhances their experience).
+Having two different authentication middleware functions enables both protected and unprotected routes. Create, updating and deleting operations require the user to be authenticated (HardAuthMiddleware), whereas simply reading posts/comments does not (SoftAuthMiddleware). If the user is authenticated, we still want their identity so we can display the appropriate UI (show edit/delete buttons for own posts/comments, and also highlight their vote direction).
 
 ### Other Endpoints
 
@@ -159,9 +158,87 @@ erDiagram
 
 The application is currently deployed on [Netlify](https://www.netlify.com/) (client) and [Render](https://render.com) (server). The PostgreSQL database is also hosted on Render.
 
+## Local Setup
+
+You will need [Node.js](https://nodejs.org/en/) and [Go](https://go.dev/) installed on your machine.
+
+You will also need to install PostgreSQL. On Linux, you can run:
+
+```bash
+sudo apt update
+sudo apt install postgresql-client
+```
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/wjh3355/cvwo-assignment
+cd cvwo-assignment/
+```
+
+2. Install the required npm modules for the frontend:
+
+```bash
+cd client/
+npm i
+```
+
+3. Create a `.env` file under the current `client/` directory and add the following environment variable to it:
+
+```text
+VITE_API_URL="http://localhost:8080"
+```
+
+4. Install the required Go modules for the server:
+
+```bash
+cd ../server/
+go mod download
+go mod verify # To verify if installation was complete
+```
+
+5. Log in to Postgres and create a new user and database:
+
+```bash
+psql -U postgres
+```
+
+```sql
+CREATE ROLE cvwo_user WITH LOGIN PASSWORD 'a-secure-password';
+CREATE DATABASE cvwo_db OWNER cvwo_user;
+```
+
+6. Dump the database schema to the newly created database:
+
+```bash
+psql -U cvwo_user -d cvwo_db -f ../init_db.sql
+```
+
+7. Create a `.env` file under the current `server/` directory and add the following environment variables to it:
+
+```text
+DATABASE_URL="postgresql://cvwo_user:a-secure-password@localhost:5432/cvwo_db" (replace with your own password if different)
+JWT_SECRET="some-very-secure-key"
+FRONTEND_URL="http://localhost:5173"
+```
+
+8. Start the backend server:
+
+```bash
+go run cmd/server/main.go
+```
+
+9. Open a new terminal window, navigate to the `client/` directory and start the frontend development server:
+
+```bash
+npm run dev
+```
+
+10. Open your browser and navigate to `http://localhost:5173`!
+
 ## Future Improvements
 
-This project is still largely a work in progress and many features (especially UI/UX) have not been fully polished. Potential future improvements (from most to least important) include:
+Many features in this project (especially UI/UX) have not been fully polished. Potential future improvements include:
 
 - UI touch ups, Dark mode and mobile responsiveness
 - Search bar to search for posts and comments by keywords
