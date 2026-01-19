@@ -107,6 +107,7 @@ export default function PostPage() {
             <ul>
                {comments.map((comment) => (
                   <PostPageComment
+                     key={comment.id}
                      comment={comment}
                      postId={postId!}
                      currUser={currUser}
