@@ -65,7 +65,7 @@ export default function Login() {
                {isSubmitting ? "Logging in..." : "Log In"}
             </Button>
             <Button type="button" onClick={() => nav("/auth/register")}>
-               No account? Regsiter here.
+               No account? REGISTER here.
             </Button>
          </div>
       </form>
