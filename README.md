@@ -217,7 +217,7 @@ psql -U cvwo_user -d cvwo_db -f ../init_db.sql
 7. Create a `.env` file under the current `server/` directory and add the following environment variables to it:
 
 ```text
-DATABASE_URL="postgresql://cvwo_user:a-secure-password@localhost:5432/cvwo_db" (replace with your own password if different)
+DATABASE_URL="postgresql://cvwo_user:a-secure-password@localhost:5432/cvwo_db" (NOTE: replace with your own password if different)
 JWT_SECRET="some-very-secure-key"
 FRONTEND_URL="http://localhost:5173"
 ```
@@ -238,11 +238,15 @@ npm run dev
 
 ## Future Improvements
 
-Many features in this project (especially UI/UX) have not been fully polished. Potential future improvements include:
+Potential future improvements include:
 
+- Switching to uuids for primary keys instead of integers for better security
+- Better loading and error handling UI on the client
 - UI touch ups, Dark mode and mobile responsiveness
 - Search bar to search for posts and comments by keywords
+- Filters for posts and comments (by date, popularity, "hotness" etc)
 - User profiles to view a particular user's posts and comments
+- Ability to post images and other media
 - Ability to comment on comments (nested comments, like in reddit)
 
 ## AI Declaration
