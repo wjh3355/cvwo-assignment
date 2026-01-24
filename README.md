@@ -197,27 +197,37 @@ go mod download
 go mod verify # To verify if installation was complete
 ```
 
-5. Log in to Postgres and create a new user and database:
+5. Log in to Postgres, set a password for the `postgres` user and create the `cvwo_db` database:
 
 ```bash
-psql -U postgres
+sudo -u postgres psql
 ```
 
 ```sql
-CREATE ROLE cvwo_user WITH LOGIN PASSWORD 'a-secure-password';
-CREATE DATABASE cvwo_db OWNER cvwo_user;
+ALTER ROLE postgres WITH PASSWORD 'your-password';
+CREATE DATABASE cvwo_db OWNER postgres;
+\q
 ```
 
-6. Dump the database schema to the newly created database:
+6. Initialise the `cvwo_db` database and check to see if the tables are created successfully:
 
 ```bash
-psql -U cvwo_user -d cvwo_db -f ../init_db.sql
+sudo -u postgres psql -d cvwo_db -f ../init_db.sql
+sudo -u postgres psql -d cvwo_db
 ```
 
-7. Create a `.env` file under the current `server/` directory and add the following environment variables to it:
+```sql
+\dt
+SELECT * FROM topics; -- should return 17 entries
+\q
+```
+
+7. Create a `.env` file under the current `server/` directory and add the following environment variables to it.
+
+Note: replace `your-password` with the password you set for the `postgres` user earlier
 
 ```text
-DATABASE_URL="postgresql://cvwo_user:a-secure-password@localhost:5432/cvwo_db" (NOTE: replace with your own password if different)
+DATABASE_URL="postgresql://postgres:your-password@localhost:5432/cvwo_db"
 JWT_SECRET="some-very-secure-key"
 FRONTEND_URL="http://localhost:5173"
 ```
@@ -235,6 +245,24 @@ npm run dev
 ```
 
 10. Open your browser and navigate to `http://localhost:5173`!
+
+**Note**: You can run the following command to check the health of the backend:
+
+```bash
+curl -i http://localhost:8080/api/health
+```
+
+If you wish to compile the Go app into a binary, you can run the following in the `server/` directory:
+
+```bash
+CGO_ENABLED=0 go build -ldflags="-s -w" -trimpath -o myserver cmd/server/main.go
+```
+
+To run the binary:
+
+```bash
+./myserver
+```
 
 ## Future Improvements
 
@@ -273,4 +301,4 @@ I hereby declare that ChatGPT and Gemini were used in the project in the followi
 - How pgdump works
 - How to migrate a local PostgreSQL database to a cloud-hosted one
 
-Last updated: 18/1/2026
+Last updated: 24/1/2026
