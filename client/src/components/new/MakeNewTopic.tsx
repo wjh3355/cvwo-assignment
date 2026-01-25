@@ -10,6 +10,7 @@ import toast from "react-hot-toast"
 import Typography from "@mui/material/Typography"
 import Alert from "@mui/material/Alert"
 import { Link } from "react-router"
+import Card from "@mui/material/Card"
 
 interface NewTopicForm {
    name: string
@@ -54,7 +55,7 @@ export default function MakeNewTopic({ user }: { user: User | undefined }) {
 
    const queryKey = ["topics"]
 
-   async function handleCreateComment(data: NewTopicForm) {
+   async function handleCreateTopic(data: NewTopicForm) {
       const postReq: NewTopicForm = {
          name: data.name.trim().toLowerCase(),
       }
@@ -74,25 +75,27 @@ export default function MakeNewTopic({ user }: { user: User | undefined }) {
    }
 
    return (
-      <div className="w-full flex flex-col gap-4">
-         <Typography variant="h5">Make new topic:</Typography>
-         <div>
-            <TextField
-               label="Name"
-               error={!!errors.name}
-               helperText={errors.name?.message}
-               className="w-full max-w-xl"
-               {...register("name")}
-               onBlur={() => trigger("name")}
-               variant="standard"
-            />
+      <Card sx={{ padding: 2, width: "100%" }}>
+         <div className="w-full flex flex-col gap-4">
+            <Typography variant="h5">Make new topic:</Typography>
+            <div>
+               <TextField
+                  label="Name"
+                  error={!!errors.name}
+                  helperText={errors.name?.message}
+                  className="w-full max-w-xl"
+                  {...register("name")}
+                  onBlur={() => trigger("name")}
+                  variant="standard"
+               />
+            </div>
+            <Button
+               disabled={!isDirty || !isValid || isSubmitting}
+               onClick={handleSubmit(handleCreateTopic)}
+            >
+               {isSubmitting ? "Submitting..." : "Create New Topic"}
+            </Button>
          </div>
-         <Button
-            disabled={!isDirty || !isValid || isSubmitting}
-            onClick={handleSubmit(handleCreateComment)}
-         >
-            {isSubmitting ? "Submitting..." : "Create New Topic"}
-         </Button>
-      </div>
+      </Card>
    )
 }

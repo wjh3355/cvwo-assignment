@@ -7,6 +7,10 @@ import type { RegisterFields } from "../../types"
 import { registerHandler } from "./handlers"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
+import CardContent from "@mui/material/CardContent"
+import Card from "@mui/material/Card"
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
 
 export default function Register() {
    const nav = useNavigate()
@@ -49,53 +53,73 @@ export default function Register() {
    const qc = useQueryClient()
 
    return (
-      <form
-         onSubmit={handleSubmit((data) =>
-            registerHandler(data, qc, nav, reset)
-         )}
-         className="flex flex-col gap-4"
+      <Box
+         sx={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+         }}
       >
-         <title>Login</title>
+         <Card
+            sx={{
+               padding: 2,
+            }}
+         >
+            <CardContent>
+               <Typography variant="h5" gutterBottom>
+                  Register
+               </Typography>
+               <form
+                  onSubmit={handleSubmit((data) =>
+                     registerHandler(data, qc, nav, reset)
+                  )}
+                  className="flex flex-col gap-4"
+               >
+                  <title>Login</title>
 
-         <TextField
-            label="Username"
-            error={!!errors.username}
-            helperText={errors.username?.message}
-            variant="standard"
-            {...register("username")}
-            onBlur={() => trigger("username")}
-            autoFocus={true}
-         />
+                  <TextField
+                     label="Username"
+                     error={!!errors.username}
+                     helperText={errors.username?.message}
+                     variant="standard"
+                     {...register("username")}
+                     onBlur={() => trigger("username")}
+                     autoFocus={true}
+                  />
 
-         <TextField
-            label="Password"
-            error={!!errors.password}
-            helperText={errors.password?.message}
-            variant="standard"
-            {...register("password")}
-            onBlur={() => trigger("password")}
-         />
+                  <TextField
+                     label="Password"
+                     error={!!errors.password}
+                     helperText={errors.password?.message}
+                     variant="standard"
+                     {...register("password")}
+                     onBlur={() => trigger("password")}
+                  />
 
-         <TextField
-            label="Confirm Password"
-            error={!!errors.confirmPassword}
-            helperText={errors.confirmPassword?.message}
-            variant="standard"
-            {...register("confirmPassword")}
-            onBlur={() => trigger("confirmPassword")}
-         />
+                  <TextField
+                     label="Confirm Password"
+                     error={!!errors.confirmPassword}
+                     helperText={errors.confirmPassword?.message}
+                     variant="standard"
+                     {...register("confirmPassword")}
+                     onBlur={() => trigger("confirmPassword")}
+                  />
 
-         <div>
-            <Button
-               type="submit"
-               disabled={!isDirty || !isValid || isSubmitting}
-            >
-               {isSubmitting ? "Registering..." : "Register"}
-            </Button>
-            <Button type="button" onClick={() => nav("/auth")}>
-               Have an account? Login here.
-            </Button>
-         </div>
-      </form>
+                  <div>
+                     <Button
+                        type="submit"
+                        disabled={!isDirty || !isValid || isSubmitting}
+                     >
+                        {isSubmitting ? "Registering..." : "Register"}
+                     </Button>
+                     <Button type="button" onClick={() => nav("/auth")}>
+                        Have an account? Login here.
+                     </Button>
+                  </div>
+               </form>
+            </CardContent>
+         </Card>
+      </Box>
    )
 }

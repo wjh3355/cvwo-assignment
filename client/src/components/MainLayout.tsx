@@ -2,11 +2,8 @@ import { Outlet } from "react-router"
 
 export default function MainLayout() {
    return (
-      <main className="min-h-screen flex flex-col">
-         <section
-            id="main-content"
-            className="grow p-4 md:p-8 flex items-start"
-         >
+      <main className="min-h-[calc(100vh-48px)] flex flex-col">
+         <section id="main-content" className="flex-1 p-4 md:p-8 flex">
             <Outlet />
          </section>
 

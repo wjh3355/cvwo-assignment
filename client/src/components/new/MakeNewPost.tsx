@@ -10,6 +10,7 @@ import toast from "react-hot-toast"
 import Typography from "@mui/material/Typography"
 import Alert from "@mui/material/Alert"
 import { Link } from "react-router"
+import Card from "@mui/material/Card"
 
 interface NewPostForm {
    title: string
@@ -81,37 +82,41 @@ export default function MakeNewPost({
    }
 
    return (
-      <div className="w-full flex flex-col gap-4">
-         <Typography variant="h5">Make new post for this topic:</Typography>
-         <div>
-            <TextField
-               label="Title"
-               error={!!errors.title}
-               helperText={errors.title?.message}
-               className="w-full max-w-xl"
-               {...register("title")}
-               onBlur={() => trigger("title")}
-               variant="standard"
-            />
+      <Card sx={{ padding: 2 }}>
+         <div className="w-full flex flex-col gap-4">
+            <Typography variant="h5">
+               Make a new post for this topic:
+            </Typography>
+            <div>
+               <TextField
+                  label="Title"
+                  error={!!errors.title}
+                  helperText={errors.title?.message}
+                  className="w-full max-w-xl"
+                  {...register("title")}
+                  onBlur={() => trigger("title")}
+                  variant="standard"
+               />
+            </div>
+            <div>
+               <TextField
+                  label="Description"
+                  error={!!errors.description}
+                  helperText={errors.description?.message}
+                  className="w-full max-w-xl"
+                  {...register("description")}
+                  onBlur={() => trigger("description")}
+                  multiline
+                  rows={4}
+               />
+            </div>
+            <Button
+               disabled={!isDirty || !isValid || isSubmitting}
+               onClick={handleSubmit(handleCreateComment)}
+            >
+               {isSubmitting ? "Submitting..." : "Submit Post"}
+            </Button>
          </div>
-         <div>
-            <TextField
-               label="Description"
-               error={!!errors.description}
-               helperText={errors.description?.message}
-               className="w-full max-w-xl"
-               {...register("description")}
-               onBlur={() => trigger("description")}
-               multiline
-               rows={4}
-            />
-         </div>
-         <Button
-            disabled={!isDirty || !isValid || isSubmitting}
-            onClick={handleSubmit(handleCreateComment)}
-         >
-            {isSubmitting ? "Submitting..." : "Submit Post"}
-         </Button>
-      </div>
+      </Card>
    )
 }

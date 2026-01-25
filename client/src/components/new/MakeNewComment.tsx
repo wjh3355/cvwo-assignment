@@ -8,6 +8,8 @@ import TextField from "@mui/material/TextField"
 import toast from "react-hot-toast"
 import Alert from "@mui/material/Alert"
 import { Link } from "react-router"
+import Card from "@mui/material/Card"
+import Typography from "@mui/material/Typography"
 
 interface NewCommentForm {
    content: string
@@ -81,23 +83,28 @@ export default function MakeNewComment({
    }
 
    return (
-      <div className="w-full flex flex-col gap-4">
-         <TextField
-            error={!!errors.content}
-            helperText={errors.content?.message}
-            {...register("content")}
-            onBlur={() => trigger("content")}
-            className="w-full max-w-xl"
-            label="Comment"
-            multiline
-            rows={4}
-         />
-         <Button
-            disabled={!isDirty || !isValid || isSubmitting}
-            onClick={handleSubmit(handleCreateComment)}
-         >
-            {isSubmitting ? "Submitting..." : "Submit Comment"}
-         </Button>
-      </div>
+      <Card sx={{ padding: 2 }}>
+         <div className="w-full flex flex-col gap-4">
+            <Typography variant="h5">
+               Make a new comment for this post:
+            </Typography>
+            <TextField
+               error={!!errors.content}
+               helperText={errors.content?.message}
+               {...register("content")}
+               onBlur={() => trigger("content")}
+               className="w-full max-w-xl"
+               label="Comment"
+               multiline
+               rows={4}
+            />
+            <Button
+               disabled={!isDirty || !isValid || isSubmitting}
+               onClick={handleSubmit(handleCreateComment)}
+            >
+               {isSubmitting ? "Submitting..." : "Submit Comment"}
+            </Button>
+         </div>
+      </Card>
    )
 }

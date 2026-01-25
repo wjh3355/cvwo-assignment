@@ -24,11 +24,14 @@ export default function Home() {
                Welcome to TalkSpace
             </Typography>
 
-            <Paper elevation={3} sx={{ p: 4, textAlign: "center" }}>
+            <Paper
+               elevation={3}
+               sx={{ paddingTop: 2, paddingBottom: 2, textAlign: "center" }}
+            >
                <Stack
                   direction="row"
                   flexWrap="wrap"
-                  gap={2}
+                  gap={1}
                   justifyContent="center"
                >
                   {!topics ? (

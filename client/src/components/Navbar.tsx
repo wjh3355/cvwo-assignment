@@ -31,12 +31,12 @@ export default function Navbar() {
                <Typography
                   variant="h6"
                   component="div"
-                  sx={{ flexGrow: 1 }}
                   className="cursor-pointer"
                   onClick={() => nav("/")}
                >
                   TalkSpace
                </Typography>
+               <div className="grow" />
                {user && !isLoading ? (
                   <>
                      <Typography
