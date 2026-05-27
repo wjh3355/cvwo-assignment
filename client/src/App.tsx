@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast"
 import GenericLoading from "./components/GenericLoading"
 import AuthRoutesWrapper from "./components/auth/AuthWrapper"
 import Navbar from "./components/Navbar"
+import TestPage from "./components/TestPage"
 
 const NotFound = lazy(() => import("./components/NotFound"))
 const ErrorPage = lazy(() => import("./components/ErrorPage"))
@@ -31,6 +32,7 @@ export default function App() {
                      <Route element={<MainLayout />}>
                         <Route index element={<Home />} />
                         <Route path=":topic" element={<TopicPage />} />
+                        <Route path="test" element={<TestPage />} />
                         <Route path=":topic/:postId" element={<PostPage />} />
                         <Route path="auth" element={<AuthRoutesWrapper />}>
                            <Route index element={<Login />} />

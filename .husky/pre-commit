@@ -1,3 +1,2 @@
-(cd server/ && goimports -w .)
 npx prettier ./client/ --write --log-level silent
 git add .
